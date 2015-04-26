@@ -4,9 +4,6 @@
     <!-- String str = getResources().getString(R.string.hello); -->
     <string name="app_name">PM2.5</string>
 
-    <string name="public_key">5j1znBVAsnSf5xQyNQyq</string>
-    <string name="url_city">http://www.pm25.in/api/querys.json?token=%1$s</string>
-    
     <!--	String data = getResources().getString(R.string.data);
 			data = String.format(data, 100, 10.3, "2011-07-01"); 
 	-->
