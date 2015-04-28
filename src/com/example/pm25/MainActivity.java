@@ -1,4 +1,6 @@
-package com.example.fm25;
+package com.example.pm25;
+
+import com.example.fm25.R;
 
 import android.app.Activity;
 import android.os.Bundle;
