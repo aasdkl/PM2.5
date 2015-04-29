@@ -7,9 +7,9 @@ public final class City {
 	private int id;
 	private String cityName;
 	
-	public static final String TABLE_NAME = " City ";
-	public static final String ID = " id ";
-	public static final String NAME = " city_name ";
+	public static final String TABLE_NAME = "City";
+	public static final String ID = "id";
+	public static final String NAME = "city_name";
 	
 	/**
 	 * 构造无id的City对象，多用于保存

@@ -6,7 +6,7 @@ import java.util.Iterator;
 import android.R.integer;
 import android.content.res.Resources;
 
-import com.example.fm25.R;
+import com.example.pm25.R;
 import com.example.pm25.MyApplication;
 import com.example.pm25.exception.DataErrorException;
 import com.example.pm25.exception.DataRangeException;

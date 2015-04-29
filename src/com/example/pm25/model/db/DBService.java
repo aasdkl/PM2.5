@@ -1,7 +1,10 @@
-package com.example.pm25.model;
+package com.example.pm25.model.db;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import com.example.pm25.model.City;
+import com.example.pm25.model.Station;
 
 import android.R.color;
 import android.app.Application;

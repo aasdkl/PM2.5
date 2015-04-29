@@ -1,4 +1,7 @@
-package com.example.pm25.model;
+package com.example.pm25.model.db;
+
+import com.example.pm25.model.City;
+import com.example.pm25.model.Station;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

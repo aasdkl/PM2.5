@@ -8,11 +8,11 @@ public final class Station {
 	private String stationCode;
 	private int cityId;
 	
-	public static final String TABLE_NAME = " Station ";
-	public static final String ID = " id ";
-	public static final String NAME = " station_name ";
-	public static final String CODE = " station_code ";
-	public static final String CITY_ID = " city_id ";
+	public static final String TABLE_NAME = "Station";
+	public static final String ID = "id";
+	public static final String NAME = "station_name";
+	public static final String CODE = "station_code";
+	public static final String CITY_ID = "city_id";
 	
 	public Station(String stationName, String stationCode) {
 		this(Constants.NO_VALUE, stationName, stationCode, Constants.NO_VALUE);
