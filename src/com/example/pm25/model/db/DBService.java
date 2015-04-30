@@ -101,5 +101,29 @@ public class DBService {
 		}
 		return list;
 	}
+
+	public boolean isCityTableEmpty() {
+		try(
+			Cursor cursor = db.query(City.TABLE_NAME, null, null, null, null, null, null, null);
+		){
+			if (cursor.getCount() == 0) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+	
+//	public boolean isStationTableEmpty() {
+//		try(
+//			Cursor cursor = db.query(Station.TABLE_NAME, null, null, null, null, null, null, null);
+//		){
+//			if (cursor.getCount() == 0) {
+//				return true;
+//			} else {
+//				return false;
+//			}
+//		}
+//	}
 	
 }

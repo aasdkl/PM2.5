@@ -9,4 +9,9 @@
         style="@style/list_itme_style"
         />
 
+    <TextView
+        android:id="@+id/key_item"
+        style="@style/key_itme_style"
+        />
+
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.example.pm25.model;
 
+import android.R.bool;
 import android.R.color;
 
 import com.example.pm25.util.Constants;
@@ -34,7 +35,7 @@ public final class City {
 		this.cityName = cityName;
 		this.citySpell = citySpell;
 	}
-
+	
 	public String getCityName() {
 		return cityName;
 	}
@@ -70,6 +71,11 @@ public final class City {
 	@Override
 	public String toString() {
 		return ID + ": " + id + " " + NAME + ": " + cityName + " " + SPELL + " " + ": " + citySpell;
+	}
+	
+	
+	public boolean isCity(){
+		return !(cityName.length()==1 && Character.isLetter(cityName.charAt(0)));
 	}
 	
 }

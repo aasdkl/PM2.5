@@ -6,4 +6,7 @@
 	<color name="red_500">#e51c23</color>    
 	<color name="purple_500">#9c27b0</color>    
 	<color name="brown_500">#795548</color>    
+	
+	<color name="gray">#bcbcbc</color>    
+	<color name="white">#fff</color>    
 </resources>
