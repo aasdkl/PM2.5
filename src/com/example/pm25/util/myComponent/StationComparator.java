@@ -1,4 +1,4 @@
-package com.example.pm25.util;
+package com.example.pm25.util.myComponent;
 
 import java.text.Collator;
 import java.util.Comparator;

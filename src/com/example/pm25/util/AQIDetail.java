@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import com.example.pm25.R;
 import com.example.pm25.exception.DataErrorException;
 import com.example.pm25.exception.DataRangeException;
+import com.example.pm25.util.myComponent.MyApplication;
 
 /**
  * 用于处理AQI详情的类.

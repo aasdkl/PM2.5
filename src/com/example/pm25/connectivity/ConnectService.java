@@ -7,8 +7,8 @@ import java.util.List;
 import com.example.pm25.model.CitiesSpellAdder;
 import com.example.pm25.model.City;
 import com.example.pm25.model.ModelCallBackListener;
-import com.example.pm25.util.CityComparator;
 import com.example.pm25.util.PM25APIs;
+import com.example.pm25.util.myComponent.CityComparator;
 
 public class ConnectService {
 	

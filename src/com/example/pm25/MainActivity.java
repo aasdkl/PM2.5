@@ -1,7 +1,6 @@
 package com.example.pm25;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.example.pm25.R;
@@ -9,28 +8,23 @@ import com.example.pm25.model.City;
 import com.example.pm25.model.ModelCallBackListener;
 import com.example.pm25.model.ModelService;
 import com.example.pm25.util.MyLog;
+import com.example.pm25.util.myComponent.CityAdapter;
 
-import android.R.array;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
 	private ProgressDialog progressDialog;
 	private ListView listView;
-	private ArrayAdapter<String> adapter;
-	private List<String> dataList = new ArrayList<>();
+	private CityAdapter adapter;
 	private List<City> cityList = new ArrayList<>();
 	private City selectedCity;
 	
@@ -41,7 +35,8 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 	
 		listView = (ListView) findViewById(R.id.list_view);
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dataList);
+		adapter = new CityAdapter(this, R.layout.city_item, cityList);
+
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -64,10 +59,8 @@ public class MainActivity extends Activity {
 					// 刷新界面
 					runOnUiThread(new Runnable() {
 						public void run() {
-							dataList.clear();
 							cityList.clear();
 							for (City city : cities) {
-								dataList.add(city.getCityName());
 								cityList.add(city);
 							}
 							adapter.notifyDataSetChanged();

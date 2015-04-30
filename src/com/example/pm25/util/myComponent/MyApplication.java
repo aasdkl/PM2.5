@@ -1,4 +1,4 @@
-package com.example.pm25.util;
+package com.example.pm25.util.myComponent;
 
 import android.app.Application;
 import android.content.Context;

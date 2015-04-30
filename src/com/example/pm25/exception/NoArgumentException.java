@@ -1,8 +1,8 @@
 package com.example.pm25.exception;
 
 import com.example.pm25.R;
-import com.example.pm25.util.MyApplication;
 import com.example.pm25.util.MyLog;
+import com.example.pm25.util.myComponent.MyApplication;
 
 public class NoArgumentException extends Exception {
 	

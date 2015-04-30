@@ -6,8 +6,8 @@ import java.util.List;
 
 import com.example.pm25.connectivity.ConnectService;
 import com.example.pm25.model.db.DBService;
-import com.example.pm25.util.CityComparator;
-import com.example.pm25.util.MyApplication;
+import com.example.pm25.util.myComponent.CityComparator;
+import com.example.pm25.util.myComponent.MyApplication;
 
 /**
  * @author Administrator
