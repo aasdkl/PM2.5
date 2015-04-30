@@ -1,17 +1,18 @@
 package com.example.pm25.model;
 
-import java.text.RuleBasedCollator;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.example.pm25.MyApplication;
 import com.example.pm25.connectivity.ConnectService;
 import com.example.pm25.model.db.DBService;
-import com.example.pm25.util.MyLog;
+import com.example.pm25.util.CityComparator;
+import com.example.pm25.util.MyApplication;
 
+/**
+ * @author Administrator
+ *
+ */
 public class ModelService {
 	
 	private static DBService dbService = DBService.getInstance(MyApplication.getContext());
@@ -20,6 +21,7 @@ public class ModelService {
 	 * 调用数据获取，
 	 * <b>注</b>：此方法会开启线程，需要使用ModelCallBackListener进行回调
 	 */
+	//TODO synchronized在activity手动加锁
 	public synchronized static void getCities(final ModelCallBackListener<City> listener){
 		new Thread(new Runnable() {
 			public void run() {
@@ -34,9 +36,7 @@ public class ModelService {
 						dbService.saveCity(city);
 					}
 				}
-				// 对中文排序
-
-				Collections.sort(cities,new CityComparator());
+				// 通知回调
 				listener.onFinish(cities);
 			}
 		}).start();

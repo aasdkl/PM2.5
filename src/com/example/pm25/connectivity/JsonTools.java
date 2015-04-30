@@ -45,7 +45,6 @@ public class JsonTools {
 			// 将返回值情空
 			cities.clear();
 		}
-		MyLog.d("json", cities.toString());
 
 		return cities;
 	}

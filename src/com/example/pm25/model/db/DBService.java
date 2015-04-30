@@ -47,6 +47,7 @@ public class DBService {
 		if (city != null) {
 			ContentValues values = new ContentValues();
 			values.put(City.NAME, city.getCityName());
+			values.put(City.SPELL, city.getCitySpell());
 			db.insert(City.TABLE_NAME, null, values);
 		}
 	}
@@ -68,10 +69,12 @@ public class DBService {
 			if (cursor.moveToFirst()) {
 				int eachId;
 				String eachName;
+				String eachSpell;
 				do {
 					eachId = cursor.getInt(cursor.getColumnIndex(City.ID));
 					eachName = cursor.getString(cursor.getColumnIndex(City.NAME));
-					list.add(new City(eachId, eachName));
+					eachSpell = cursor.getString(cursor.getColumnIndex(City.SPELL));
+					list.add(new City(eachId, eachName, eachSpell));
 				} while (cursor.moveToNext());
 			}
 		}

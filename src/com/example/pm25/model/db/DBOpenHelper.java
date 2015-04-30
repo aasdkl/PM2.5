@@ -14,7 +14,8 @@ public class DBOpenHelper extends SQLiteOpenHelper{
 	 */
 	private static final String CREATE_CITY = "create table " + City.TABLE_NAME + " (" +
 			City.ID + " integer primary key autoincrement, " +
-			City.NAME + " text)";
+			City.NAME + " text, " +
+			City.SPELL + " text)";
 	/**
 	 * 观测点建表语句
 	 */

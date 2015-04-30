@@ -1,7 +1,7 @@
 package com.example.pm25.exception;
 
 import com.example.pm25.R;
-import com.example.pm25.MyApplication;
+import com.example.pm25.util.MyApplication;
 import com.example.pm25.util.MyLog;
 
 public class NoLoginException extends Exception {
