@@ -1,0 +1,28 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+    
+    <Button
+        android:id="@+id/back"
+        android:text="@string/back" 
+        style="@style/no_margin_btn"
+        />
+    
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:textSize="24sp"
+        android:text="南京" 
+        />
+
+    <Button
+        android:id="@+id/add"
+        android:text="@string/add" 
+        style="@style/no_margin_btn"
+        />
+    
+</LinearLayout>

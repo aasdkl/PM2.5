@@ -3,7 +3,12 @@
 	
     <!-- String str = getResources().getString(R.string.hello); -->
     <string name="app_name">PM2.5</string>
-
+    <string name="back">&#060;&#060;</string>
+    <string name="q_mark">?</string>
+    <string name="describe">%1$s（%2$s）</string>
+    <string name="add">+</string>
+    <string name="addHint">已成功添加</string>
+    
     <!--	String data = getResources().getString(R.string.data);
 			data = String.format(data, 100, 10.3, "2011-07-01"); 
 	-->
