@@ -1,72 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
-   	<com.example.pm25.layout.NavigateLayout
-	    android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-	</com.example.pm25.layout.NavigateLayout>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fadingEdge="vertical" >
 
-   	
-   	
-   	<RelativeLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingStart="30dp"
-        android:paddingEnd="38dp"
-        android:background="@color/yellow_500"
-   	    >
-	    <TextView 
+        android:layout_height="wrap_content" >
+
+        <FrameLayout
+            android:id="@+id/navigate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true" >
+
+            <com.example.pm25.layout.NavigateLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+            </com.example.pm25.layout.NavigateLayout>
+        </FrameLayout>
+
+        <RelativeLayout
+            android:id="@+id/matchScene"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/navigate"
+            android:background="@color/yellow_500"
+            android:paddingEnd="38dp"
+            android:paddingStart="30dp"
+            android:paddingTop="10dp" 
+            android:paddingBottom="16dp" 
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/aqi"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/pm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:shadowColor="#555555"
+                android:shadowDx="0"
+                android:shadowDy="5.0"
+                android:shadowRadius="3.0"
+                android:text="140"
+                android:textSize="70sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/circle"
+                android:gravity="center"
+                android:height="22dp"
+                android:paddingTop="1dp"
+                android:text="@string/q_mark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:width="22dp" />
+
+            <TextView
+                android:id="@+id/pm_describe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pm"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="-10dp"
+                android:text="三级（轻度污染）"
+                android:textSize="20sp" />
+            
+        </RelativeLayout>
+
+        <!--
+            setOnTouchListener
+	   	switch (event.getAction()) {
+		   case MotionEvent.ACTION_DOWN:
+		   	xxx.setInAnimation(AnimationUtils.loadAnimation(this,R.anim.push_in));          -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/navigate"
+            android:background="@color/alpha_white"
+            android:padding="5dp"
+            android:text="@string/what_is_aqi"
+            android:visibility="invisible" 
+        />
+        
+        <TextView
+	        android:id="@+id/time"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:textStyle="bold"
-	        android:textSize="22sp"
-	        android:text="@string/aqi"
-	        android:layout_centerVertical="true"
-	    />
-	   	<TextView 
-	        android:id="@+id/pm"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_centerHorizontal="true"
-	        android:textStyle="bold"
-	        android:textSize="70sp"
-	        android:text="140"
-	        android:shadowColor="#555555"
-			android:shadowDx="0"
-			android:shadowDy="5.0"
-			android:shadowRadius="3.0"
-	    />
-	    <TextView 
-	        android:background="@drawable/circle"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:width="22dp"
-	        android:height="22dp"
-	        android:textStyle="bold"
-	        android:textSize="18sp"
-	        android:paddingTop="1dp"
-	        android:gravity="center"
-	        android:text="@string/q_mark"
-	        android:layout_centerVertical="true"
 	        android:layout_alignParentEnd="true"
+	        android:text="2015-05-02 14:00:00"
+	        android:layout_below="@id/matchScene"
+	        android:textSize="12sp" 
+	        android:layout_marginTop="-14dp"
 	    />
-	    <TextView 
-	        android:layout_below="@id/pm"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-  	        android:layout_centerHorizontal="true"
-   	        android:textSize="20sp"
-        	android:layout_marginTop="-10dp"
 
-	        android:text="三级（轻度污染）"
-	        />
-   	</RelativeLayout>
 
-   	
-   	
-</LinearLayout>
+        <LinearLayout
+            android:id="@+id/suggestScene"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/matchScene"
+            android:orientation="vertical"
+            android:paddingBottom="0dp"
+            android:paddingEnd="10dp"
+            android:paddingStart="20dp"
+            android:paddingTop="18dp"
+            android:textSize="16sp" >
+
+            <TextView
+                style="@style/content_style"
+                android:text="@string/primary_pollutant_detail"
+                android:textStyle="bold" />
+
+            <TextView
+                style="@style/title_style"
+                android:text="@string/aqi_effect" />
+
+            <TextView
+                style="@style/content_style"
+                android:text="       空气质量可接受，但某些污染物可能对极少数异常敏感人群健康有较弱影响" />
+
+            <TextView
+                style="@style/title_style"
+                android:text="@string/aqi_suggestion" />
+
+            <TextView
+                style="@style/content_style"
+                android:text="       儿童、老年人及心脏病、呼吸系统疾病患者避免长时间、高强度的户外锻炼，一般人群适量减少户外运动" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/circleScene"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/suggestScene" 
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_marginBottom="6dp"
+                android:text="@string/showCircle" 
+                android:gravity="center_horizontal"
+                />
+            			
+            <LinearLayout
+	            android:id="@+id/c1"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:paddingBottom="4dp"
+			>
+	            <include android:id="@+id/circle1" layout="@layout/data_circle" /> 
+	            <include android:id="@+id/circle2" layout="@layout/data_circle" /> 
+	            <include android:id="@+id/circle3" layout="@layout/data_circle" /> 
+	            <include android:id="@+id/circle4" layout="@layout/data_circle" /> 
+	        </LinearLayout>
+            <LinearLayout
+	            android:id="@+id/c2"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+			>
+	            <include android:id="@+id/circle1" layout="@layout/data_circle" /> 
+	            <include android:id="@+id/circle2" layout="@layout/data_circle" /> 
+	            <include android:id="@+id/circle3" layout="@layout/data_circle" /> 
+	            <include android:id="@+id/circle4" layout="@layout/data_circle" /> 
+	        </LinearLayout>
+            
+        </LinearLayout>
+        
+    </RelativeLayout>
+
+</ScrollView>

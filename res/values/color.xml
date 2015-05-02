@@ -11,4 +11,6 @@
 	<color name="gray">#bcbcbc</color>    
 	<color name="lightgray">#ddd</color>    
 	<color name="white">#fff</color>    
+	
+	<color name="alpha_white">#efff</color>    
 </resources>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <!-- 
+       View subLayout1 = (View)findViewById(R.id.main1); 
+       Button myButton_main1 = (Button)subLayout1.findViewById(R.id.mybutton); 
+     -->
+    
+    <TextView
+        android:id="@+id/num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/circle"
+        android:gravity="center_horizontal"
+        android:height="60dp"
+        android:paddingTop="14sp"
+        android:text="64"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:width="60dp" />
+
+    <TextView
+        android:id="@+id/des"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="-26dp"
+        android:text="PM10/1h"
+        android:textSize="10sp" />
+
+</LinearLayout>
