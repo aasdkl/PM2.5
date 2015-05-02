@@ -117,7 +117,9 @@
             android:paddingEnd="10dp"
             android:paddingStart="20dp"
             android:paddingTop="18dp"
-            android:textSize="16sp" >
+            android:textSize="16sp" 
+            
+            >
 
             <TextView
                 style="@style/content_style"
@@ -146,9 +148,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/suggestScene" 
+            android:paddingTop="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
+            android:paddingBottom="20dp"
             android:orientation="vertical"
+            android:background="@color/lightgray"
             >
             <TextView
                 android:layout_width="match_parent"
@@ -182,6 +187,8 @@
 	        </LinearLayout>
             
         </LinearLayout>
+        
+        
         
     </RelativeLayout>
 

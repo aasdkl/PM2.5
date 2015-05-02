@@ -9,6 +9,8 @@
     <string name="add">+</string>
     <string name="addHint">已成功添加</string>
     <string name="showCircle">——数据详情——</string>
+    <string name="chooseHint">请选择城市</string>
+    
     
     <!--	String data = getResources().getString(R.string.data);
 			data = String.format(data, 100, 10.3, "2011-07-01"); 

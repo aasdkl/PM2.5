@@ -1,13 +1,26 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="${relativePackage}.${activityClass}" 
-    android:orientation="vertical">
+    tools:context="${relativePackage}.${activityClass}" >
 
-    <ListView android:id="@+id/list_view"
+    <FrameLayout
+        android:id="@+id/navigate"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" >
+
+        <com.example.pm25.layout.PlainNavigateLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </com.example.pm25.layout.PlainNavigateLayout>
+    </FrameLayout>
+
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        android:layout_below="@id/navigate">
     </ListView>
-    
-</LinearLayout>
+
+</RelativeLayout>
