@@ -185,7 +185,6 @@
                     android:id="@+id/c1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
                     android:layout_weight="1" >
 
                     <include
@@ -209,7 +208,6 @@
                     android:id="@+id/c2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
                     android:layout_weight="1" >
 
                     <include
@@ -223,10 +221,11 @@
                     <include
                         android:id="@+id/circle7"
                         layout="@layout/data_circle" />
-
+					
                     <include
                         android:id="@+id/circle8"
                         layout="@layout/data_circle" />
+					
                 </LinearLayout>
             </LinearLayout>
 

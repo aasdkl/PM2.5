@@ -3,19 +3,20 @@
 	
     <!-- String str = getResources().getString(R.string.hello); -->
     <string name="app_name">PM2.5</string>
-    <string name="back">&#060;&#060;</string>
-    <string name="q_mark">\&#063;</string>
+    <string name="back">&lt;&lt;</string>
+    <string name="q_mark">\?</string>
     <string name="describe">%1$s（%2$s）</string>
     <string name="add">+</string>
     <string name="addHint">已成功添加</string>
     <string name="showCircle">——数据详情——</string>
     <string name="chooseHint">请选择城市</string>
     
+    <string name="moeEye">&gt; &lt;</string>
+    <string name="moeMouse">&lt;b&gt;～&lt;/b&gt;</string>
     
     <!--	String data = getResources().getString(R.string.data);
 			data = String.format(data, 100, 10.3, "2011-07-01"); 
 	-->
-	<string name="data_update_time">数据更新时间：%1$s</string>
     
 	<string name="aqi">AQI</string>
 	<string name="translate_aqi">空气质量指数</string>
@@ -23,42 +24,30 @@
 	
 	<string name="pm25_1h">PM2.5/1h</string>
 	<string name="translate_pm25_1h">细颗粒物1小时平均值</string>
-	<string name="pm25_24h">PM2.5/24h</string>
-	<string name="translate_pm25_24h">细颗粒物24小时滑动平均值</string>
 	<string name="what_is_pm25">细颗粒物(PM2.5)是对空气中直径小于等于2.5微米的固体颗粒或液滴的总称，主要来自燃烧排放、道路扬尘、工业粉尘等，会对呼吸系统和心血管系统造成伤害</string>
 	
 	<string name="pm10_1h">PM10/1h</string>
 	<string name="translate_pm10_1h">可吸入颗粒物1小时平均值</string>
-	<string name="pm10_24h">PM10/24h</string>
-	<string name="translate_pm10_24h">可吸入颗粒物24小时滑动平均值</string>
 	<string name="what_is_pm10">可吸入颗粒物(PM10)是对空气中直径小于等于10微米的固体颗粒或液滴的总称，包括了PM2.5</string>
 	
 	<string name="co_1h">CO/1h</string>
 	<string name="translate_co_1h">一氧化碳1小时平均值</string>
-	<string name="co_24h">CO/24h</string>
-	<string name="translate_co_24h">一氧化碳日滑动平均值</string>
 	<string name="what_is_co">一氧化碳(CO)是大气主要污染物之一，主要来自于化石燃料的不完全燃烧，包括机动车、电厂所排放的废气</string>
 	
 	<string name="no2_1h">NO2/1h</string>
 	<string name="translate_no2_1h">二氧化氮1小时平均值</string>
-	<string name="no2_24h">NO2/24h</string>
-	<string name="translate_no2_24h">二氧化氮日滑动平均值</string>
 	<string name="what_is_no2">二氧化氮(NO2)是大气主要污染物之一，是酸雨的成因之一，主要来自于机动车、电厂所排放的废气</string>
 	
 	<string name="o3_1h">O3/1h</string>
 	<string name="translate_o3_1h">臭氧1小时平均值</string>
-	<string name="o3_24h">O3/24h</string>
-	<string name="translate_o3_24h">臭氧日最大1小时滑动平均值</string>
-	<string name="o3_8h_1h">O3/1h</string>
-	<string name="translate_o3_8h_1h">臭氧8小时滑动平均值</string>
-	<string name="o3_8h_24h">O3/8h/24h</string>
-	<string name="translate_o3_8h_24h">臭氧日最大8小时滑动平均值</string>
-	<string name="what_is_o3">臭氧(O3)污染是指距地面1～2km的近地层臭氧，过量的臭氧会刺激人的呼吸系统，严重时会造成伤害</string>
+	<string name="what_is_o3_1h">臭氧(O3)污染是指距地面1～2km的近地层臭氧，过量的臭氧会刺激人的呼吸系统，严重时会造成伤害。其中1小时平均值指短期内造成的直接伤害。</string>
+
+	<string name="o3_8h">O3/1h</string>
+	<string name="translate_o3_8h">臭氧8小时滑动平均值</string>
+	<string name="what_is_o3_8h">臭氧(O3)污染是指距地面1～2km的近地层臭氧，过量的臭氧会刺激人的呼吸系统，严重时会造成伤害。而在臭氧浓度较低时，持续暴露8至10小时会造成累积伤害。</string>
 	
 	<string name="so2_1h">SO2/1h</string>
 	<string name="translate_so2_1h">二氧化硫1小时平均值</string>
-	<string name="so2_24h">SO2/24h</string>
-	<string name="translate_so2_24h">二氧化硫日滑动平均值</string>
 	<string name="what_is_so2">二氧化硫(SO2)是大气主要污染物之一，主要来自于煤、石油等燃料的燃烧，以及生产硫酸等工厂排放的废气</string>
 
 	<string name="aqi_quality">空气质量指数类别</string>
@@ -68,5 +57,6 @@
 	<string name="position_name">监测点</string>
 	<string name="primary_pollutant">首要污染物</string>
 	<string name="primary_pollutant_detail">首要污染物：\t\t%1$s（%2$s）</string>
+	
 	
 </resources>
