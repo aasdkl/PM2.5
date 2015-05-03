@@ -42,7 +42,7 @@
 	<string name="translate_o3_1h">臭氧1小时平均值</string>
 	<string name="what_is_o3_1h">臭氧(O3)污染是指距地面1～2km的近地层臭氧，过量的臭氧会刺激人的呼吸系统，严重时会造成伤害。其中1小时平均值指短期内造成的直接伤害。</string>
 
-	<string name="o3_8h">O3/1h</string>
+	<string name="o3_8h">O3/8h</string>
 	<string name="translate_o3_8h">臭氧8小时滑动平均值</string>
 	<string name="what_is_o3_8h">臭氧(O3)污染是指距地面1～2km的近地层臭氧，过量的臭氧会刺激人的呼吸系统，严重时会造成伤害。而在臭氧浓度较低时，持续暴露8至10小时会造成累积伤害。</string>
 	

@@ -3,9 +3,11 @@ package com.example.pm25;
 import java.util.Iterator;
 
 import com.example.pm25.R.id;
+import com.example.pm25.util.Constants;
 import com.example.pm25.util.MyLog;
 import com.example.pm25.util.PM25Constants;
 
+import android.R.bool;
 import android.R.integer;
 import android.app.Activity;
 import android.content.Context;
@@ -26,12 +28,15 @@ import android.widget.ViewFlipper;
 
 public class DetailActivity extends Activity {
 
-	private static final int CIRCLES_NUM = 8;
+	public static final int CIRCLES_NUM = 8;
 
 	private LinearLayout[] circles = new LinearLayout[CIRCLES_NUM];
+	
 	private View aqiAskBtn;
-	private LinearLayout elseAskBtn;
 	private ViewFlipper aqiAns;
+
+	private LinearLayout elseAskBtn1;
+	private LinearLayout elseAskBtn2;
 	private ViewFlipper elseAns;
 	
 	public static void actionStart(Context context, String city) {
@@ -58,9 +63,12 @@ public class DetailActivity extends Activity {
 				this));
 
 		elseAns = (ViewFlipper) findViewById(R.id.what_is_else);
-		elseAskBtn = (LinearLayout) findViewById(R.id.circleScene);
-		elseAskBtn.setOnTouchListener(new OnCirclesTouchListener(
-				elseAns, this));
+		elseAskBtn1 = (LinearLayout) findViewById(R.id.c1);
+		elseAskBtn1.setOnTouchListener(new OnCirclesTouchListener(elseAns, Part.UP,
+				this));
+		elseAskBtn2 = (LinearLayout) findViewById(R.id.c2);
+		elseAskBtn2.setOnTouchListener(new OnCirclesTouchListener(elseAns, Part.DOWN,
+				this));
 
 	}
 
@@ -135,28 +143,31 @@ final class OnCirclesTouchListener implements OnTouchListener {
 	private ViewFlipper elseAns;
 	private Context context;
 	private TextView elseTextArea;
-	private String[] details;
-
-	public OnCirclesTouchListener(ViewFlipper elseAns, Context context) {
+	private String toShow;
+	private Part part;
+	
+	public OnCirclesTouchListener(ViewFlipper elseAns, Part part, Context context) {
 		this.elseAns = elseAns;
 		this.context = context;
+		this.part = part;
 		elseTextArea = (TextView) elseAns.findViewById(R.id.elseText);
 	}
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		if (isInCircleArea()) {
-
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
-				MyLog.d("Detail Activity", "ACTION_DOWN");
-				elseAns.setVisibility(View.VISIBLE);
-				elseAns.startAnimation(AnimationUtils
-						.loadAnimation(context,
-								R.anim.push_in));
-				break;
+				if (isInCircleArea(v, event)) {
+					elseTextArea.setText(toShow);
+					elseAns.setVisibility(View.VISIBLE);
+					elseAns.startAnimation(AnimationUtils
+							.loadAnimation(context,
+									R.anim.push_in));
+					break;
+				} else {
+					return false;
+				}
 			case MotionEvent.ACTION_UP:
-				MyLog.d("Detail Activity", "ACTION_UP");
 				v.performClick();
 				elseAns.setVisibility(View.INVISIBLE);
 				elseAns.startAnimation(AnimationUtils
@@ -167,15 +178,45 @@ final class OnCirclesTouchListener implements OnTouchListener {
 				break;
 			}
 			return true;
-		} else {
-			return false;
-		}
 
 	}
 
-	// 圆形区域的矩形范围
-	private boolean isInCircleArea() {
-		return false;
+	// 圆形区域的矩形范围，直接通过坐标x在该行的四分之多少进行定位
+	// ! WARN 具有幻数4
+	private boolean isInCircleArea(View v, MotionEvent event) {
+		int lineIndex = Constants.NO_VALUE;// 定位，从0开始
+		int xTouch = (int) event.getX();
+		int halfWidth = v.getWidth() >> 1;
+		
+		if (xTouch < halfWidth) {// 0or1
+			lineIndex=0;
+		} else {		// 2or3
+			lineIndex=2;
+		}
+		// 再一半（四分之一）
+		int quarterWidth = halfWidth >> 1;
+		
+		// 是否在右侧
+		boolean isInRhs = (lineIndex == 0) ? (xTouch > quarterWidth) : (xTouch > quarterWidth + halfWidth);
+		if (isInRhs) {
+			lineIndex += 1;
+		}
+		
+		int circleIndex = part.ordinal() * 4 + lineIndex;
+		MyLog.e("circleIndex", ""+circleIndex);
+
+		if (circleIndex == DetailActivity.CIRCLES_NUM - 1) {
+			return false;
+		} else {
+			// 因为第一个是AQI，在圆中没有AQI
+			toShow = PM25Constants.getDescribeArray()[circleIndex + 1];
+			return true;
+		}
 	}
 
 }
+
+enum Part {
+	UP, DOWN;
+}
+
