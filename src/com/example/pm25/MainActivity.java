@@ -42,9 +42,9 @@ public class MainActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				selectedCity = cityList.get(position);
-//				if (selectedCity.isCity()) {
-					Toast.makeText(MainActivity.this, selectedCity.getCityName(), Toast.LENGTH_SHORT).show();
-//				}
+				if (selectedCity.isCity()) {
+					DetailActivity.actionStart(MainActivity.this, selectedCity.getCityName());
+				}
 			}
 		});
 		getCities();

@@ -62,8 +62,8 @@
 	<string name="what_is_so2">二氧化硫(SO2)是大气主要污染物之一，主要来自于煤、石油等燃料的燃烧，以及生产硫酸等工厂排放的废气</string>
 
 	<string name="aqi_quality">空气质量指数类别</string>
-	<string name="aqi_effect">对健康影响情况：</string>
-	<string name="aqi_suggestion">建议采取的措施：</string>
+	<string name="aqi_effect">影响：</string>
+	<string name="aqi_suggestion">建议：</string>
 	
 	<string name="position_name">监测点</string>
 	<string name="primary_pollutant">首要污染物</string>

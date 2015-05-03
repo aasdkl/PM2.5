@@ -24,6 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.example.pm25.DetailActivity" >
+        </activity>
     </application>
 
 </manifest>
