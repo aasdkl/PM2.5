@@ -1,4 +1,4 @@
-package com.example.pm25.model;
+package com.example.pm25.po;
 
 import com.example.pm25.util.Constants;
 
@@ -14,10 +14,6 @@ public final class Station {
 	public static final String CODE = "station_code";
 	public static final String CITY_ID = "city_id";
 	
-	public Station(String stationName, String stationCode) {
-		this(Constants.NO_VALUE, stationName, stationCode, Constants.NO_VALUE);
-	}
-
 	public Station(String stationName, String stationCode, int cityId) {
 		this(Constants.NO_VALUE, stationName, stationCode, cityId);
 	}
@@ -60,6 +56,11 @@ public final class Station {
 		} else {
 			return true;
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return ID +" "+ id + ", " + NAME +" "+ stationName +", "+CODE +" "+ stationCode +", "+CITY_ID +" "+ cityId;
 	}
 
 }
