@@ -1,12 +1,15 @@
 package com.example.pm25;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.example.pm25.R.id;
 import com.example.pm25.util.Constants;
 import com.example.pm25.util.MyLog;
 import com.example.pm25.util.PM25Constants;
 
+import android.R.anim;
 import android.R.bool;
 import android.R.integer;
 import android.app.Activity;
@@ -21,7 +24,9 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -38,7 +43,10 @@ public class DetailActivity extends Activity {
 	private LinearLayout elseAskBtn1;
 	private LinearLayout elseAskBtn2;
 	private ViewFlipper elseAns;
+	private Spinner titleSpinner;
 	
+	private StationAdapter<String> stationAdapter;
+
 	public static void actionStart(Context context, String city) {
 		Intent intent = new Intent(context, DetailActivity.class);
 		intent.putExtra("name", city);
@@ -70,6 +78,20 @@ public class DetailActivity extends Activity {
 		elseAskBtn2.setOnTouchListener(new OnCirclesTouchListener(elseAns, Part.DOWN,
 				this));
 
+		titleSpinner = (Spinner) findViewById(R.id.title);
+
+		// spinner
+		List<String> stations = new ArrayList<>();
+		stations.add("南京");
+		stations.add("仙林大学城大学城");
+		stations.add("鼓楼");
+		stations.add("中华门");
+
+		stationAdapter = new StationAdapter<String>(this, 
+				R.layout.spinner_checked_text, stations);
+		titleSpinner.setAdapter(stationAdapter);
+		
+		
 	}
 
 	private void setCircles() {
