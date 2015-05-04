@@ -1,6 +1,8 @@
 package com.example.pm25.model;
 
 import java.util.List;
+
+import com.example.pm25.po.City;
 import com.github.stuxuhai.jpinyin.PinyinFormat;
 import com.github.stuxuhai.jpinyin.PinyinHelper;
 

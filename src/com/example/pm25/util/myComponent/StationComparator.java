@@ -3,8 +3,8 @@ package com.example.pm25.util.myComponent;
 import java.text.Collator;
 import java.util.Comparator;
 
-import com.example.pm25.model.City;
-import com.example.pm25.model.Station;
+import com.example.pm25.po.City;
+import com.example.pm25.po.Station;
 
 /**
  * 对观测点的中文

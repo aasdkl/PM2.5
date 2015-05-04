@@ -1,13 +1,13 @@
 package com.example.pm25.model;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.example.pm25.connectivity.ConnectService;
 import com.example.pm25.model.db.DBService;
-import com.example.pm25.util.MyLog;
-import com.example.pm25.util.myComponent.CityComparator;
+import com.example.pm25.po.City;
+import com.example.pm25.po.Station;
+import com.example.pm25.po.StationAirQuality;
 import com.example.pm25.util.myComponent.MyApplication;
 
 /**
@@ -15,22 +15,21 @@ import com.example.pm25.util.myComponent.MyApplication;
  *
  */
 public class ModelService {
+	//TODO 由于可能新增数据，所以方法考虑判断如果联网就直接连
 	
 	private static DBService dbService = DBService.getInstance(MyApplication.getContext());
 	
 	/**
-	 * 调用数据获取，
+	 * 调用数据获取城市列表
 	 * <b>注</b>：此方法会开启线程，需要使用ModelCallBackListener进行回调
 	 */
-	//TODO synchronized在activity手动加锁
 	public synchronized static void getCities(final ModelCallBackListener<City> listener){
 		new Thread(new Runnable() {
 			public void run() {
 				List<City> cities = new LinkedList<>();
 				// 从数据库获取数据
-				//TODO 可能新增数据，考虑判断如果联网就直接连
 				if (dbService.isCityTableEmpty()) {
-					fetchData(listener);
+					fetchCityToDB(listener);
 				}
 				cities = dbService.loadCities();
 				// 通知回调
@@ -39,8 +38,91 @@ public class ModelService {
 		}).start();
 	}
 	
-	private static void fetchData(final ModelCallBackListener<City> listener) {
-		//如果数据库中没有数据，从网络获取
+
+	/**
+	 * 调用数据获取Stations数据
+	 * <b>注</b>：此方法会开启线程，需要使用ModelCallBackListener进行回调
+	 * @param city 
+	 */	
+	public synchronized static void getStations(final City city, final ModelCallBackListener<Station> listener) {
+		new Thread(new Runnable() {
+			public void run() {
+				List<Station> stations = new LinkedList<>();
+				// 从数据库获取station的数据
+				if (dbService.isCityStationEmpty(city)) {
+					fetchStationToDB(city, listener);
+				}
+
+				stations = dbService.loadStations(city);
+				// 通知回调
+				listener.onFinish(stations);
+			}
+		}).start();
+	}
+
+
+	/**
+	 * 调用数据获取数据
+	 * <b>注</b>：此方法会开启线程，需要使用ModelCallBackListener进行回调
+	 * @param city 
+	 */
+	public synchronized static void getDetails(final City city, final ModelCallBackListener<StationAirQuality> listener) {
+		
+		new Thread(new Runnable() {
+			public void run() {
+				List<StationAirQuality> qualities = new LinkedList<>();
+
+				// 如果上次sharedDatas里面数据为空，或者sharedDatas时间和实际的时间相差>1小时，网络获取数据
+				// 否则返回上次的数据
+				StationAirQuality oldData = getOldData(city);
+
+				if (isDataTooOld(oldData)) {
+					qualities = fetchCityQualityAndReturn(city, listener);
+				} else {
+					qualities.add(oldData);
+				}
+				
+				listener.onFinish(qualities);
+			}
+
+		}).start();
+
+	}
+	
+	private static boolean isDataTooOld(StationAirQuality oldData) {
+		// TODO 如果上次sharedDatas里面数据为空，或者sharedDatas时间和实际的时间相差>1小时
+		return false;
+	}
+	private static StationAirQuality getOldData(City city) {
+		// TODO 获取sharedDatas里面数据
+		return null;
+	}
+	
+	private static List<StationAirQuality> fetchCityQualityAndReturn(City city, final ModelCallBackListener<StationAirQuality> listener) {
+		List<StationAirQuality> stations = ConnectService.getCityQuality(city, listener);
+		return stations;
+	}
+	
+	/**
+	 * 此时数据库没有数据，需要从网络获取并存到数据库
+	 * @param city 
+	 * @param listener
+	 */
+	private static void fetchStationToDB(City city, final ModelCallBackListener<Station> listener) {
+		List<Station> stations = ConnectService.getStations(city, listener);
+		for (Station station : stations) {
+			dbService.saveStation(station);
+		}
+
+		stations.clear();
+		stations = null;
+	}
+	
+	/**
+	 * 此时数据库没有数据，需要从网络获取并存到数据库
+	 * @param listener
+	 */
+	private static void fetchCityToDB(final ModelCallBackListener<City> listener) {
 		List<City> cities = new LinkedList<>();
 		cities = ConnectService.getCities(listener);
 		String nowSpell = "#";
@@ -57,4 +139,6 @@ public class ModelService {
 		cities.clear();
 		cities = null;
 	}
+
+
 }

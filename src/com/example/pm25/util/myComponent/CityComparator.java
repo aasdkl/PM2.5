@@ -3,7 +3,7 @@ package com.example.pm25.util.myComponent;
 import java.text.Collator;
 import java.util.Comparator;
 
-import com.example.pm25.model.City;
+import com.example.pm25.po.City;
 
 /**
  * 对城市的拼音排序

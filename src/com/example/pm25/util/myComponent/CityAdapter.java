@@ -5,7 +5,7 @@ import java.util.Locale;
 
 import com.example.pm25.R;
 import com.example.pm25.R.drawable;
-import com.example.pm25.model.City;
+import com.example.pm25.po.City;
 
 import android.R.string;
 import android.content.Context;

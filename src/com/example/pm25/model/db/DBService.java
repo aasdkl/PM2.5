@@ -3,8 +3,9 @@ package com.example.pm25.model.db;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.example.pm25.model.City;
-import com.example.pm25.model.Station;
+import com.example.pm25.po.City;
+import com.example.pm25.po.Station;
+import com.example.pm25.util.MyLog;
 
 import android.R.color;
 import android.app.Application;
@@ -57,6 +58,7 @@ public class DBService {
 			ContentValues values = new ContentValues();
 			values.put(Station.NAME, station.getStationName());
 			values.put(Station.CODE, station.getStationCode());
+			values.put(Station.CITY_ID, station.getCityId());
 			db.insert(Station.TABLE_NAME, null, values);
 		}
 	}
@@ -81,11 +83,11 @@ public class DBService {
 		return list;
 	}
 
-	public List<Station> loadStations(int cityId) {
+	public List<Station> loadStations(City city) {
 		List<Station> list = new LinkedList<Station>();
 		try(
-			Cursor cursor = db.query(Station.NAME, null, Station.CITY_ID + " = ? "
-					, new String[]{String.valueOf(cityId)}, null, null, null, null);
+			Cursor cursor = db.query(Station.TABLE_NAME, null, Station.CITY_ID + " = ? "
+					, new String[]{String.valueOf(city.getId())}, null, null, null, null);
 		) {
 			if (cursor.moveToFirst()) {
 				int eachId;
@@ -95,7 +97,7 @@ public class DBService {
 					eachId = cursor.getInt(cursor.getColumnIndex(Station.ID));
 					eachName = cursor.getString(cursor.getColumnIndex(Station.NAME));
 					eachCode = cursor.getString(cursor.getColumnIndex(Station.CODE));
-					list.add(new Station(eachId, eachName, eachCode, cityId));
+					list.add(new Station(eachId, eachName, eachCode, city.getId()));
 				} while (cursor.moveToNext());
 			}
 		}
@@ -114,16 +116,37 @@ public class DBService {
 		}
 	}
 	
-//	public boolean isStationTableEmpty() {
-//		try(
-//			Cursor cursor = db.query(Station.TABLE_NAME, null, null, null, null, null, null, null);
-//		){
-//			if (cursor.getCount() == 0) {
-//				return true;
-//			} else {
-//				return false;
+	public boolean isCityStationEmpty(City city) {
+
+		try(
+			Cursor cursor = db.query(Station.TABLE_NAME, null, Station.CITY_ID + " = ? "
+					, new String[]{String.valueOf(city.getId())}, null, null, null, null);		){
+				
+//			Cursor cursor = db.query(Station.TABLE_NAME, null, null
+//					, null, null, null, null, null);		){
+			if (cursor.getCount() == 0) {
+				return true;
+			} else {
+				return false;
+			}
+			
+//			MyLog.e("",city.toString());
+//			if (cursor.moveToFirst()) {
+//				int eachId;
+//				String eachName;
+//				String eachCode;
+//				int eachCityId;
+//				do {
+//					eachId = cursor.getInt(cursor.getColumnIndex(Station.ID));
+//					eachName = cursor.getString(cursor.getColumnIndex(Station.NAME));
+//					eachCode = cursor.getString(cursor.getColumnIndex(Station.CODE));
+//					eachCityId = cursor.getInt(cursor.getColumnIndex(Station.CITY_ID));
+//					MyLog.e("?", eachId +" "+eachName +" "+eachCode+" "+eachCityId);
+//				} while (cursor.moveToNext());
 //			}
-//		}
-//	}
-	
+//
+		}
+//		return false;
+	}
+
 }

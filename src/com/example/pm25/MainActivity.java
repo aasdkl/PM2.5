@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.pm25.R;
-import com.example.pm25.model.City;
 import com.example.pm25.model.ModelCallBackListener;
 import com.example.pm25.model.ModelService;
+import com.example.pm25.po.City;
 import com.example.pm25.util.MyLog;
 import com.example.pm25.util.myComponent.CityAdapter;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -20,9 +18,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
 
-	private ProgressDialog progressDialog;
 	private ListView listView;
 	private CityAdapter adapter;
 	private List<City> cityList = new ArrayList<>();
@@ -43,7 +40,7 @@ public class MainActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				selectedCity = cityList.get(position);
 				if (selectedCity.isCity()) {
-					DetailActivity.actionStart(MainActivity.this, selectedCity.getCityName());
+					DetailActivity.actionStart(MainActivity.this, selectedCity);
 				}
 			}
 		});
@@ -86,18 +83,4 @@ public class MainActivity extends Activity {
 		});
 	}
 	
-	private void showProgressDialog() {
-		if (progressDialog == null) {
-			progressDialog = new ProgressDialog(this);
-			progressDialog.setMessage("正在加载。。。");
-			progressDialog.setCanceledOnTouchOutside(false);
-		}
-		progressDialog.show();
-	}
-	
-	private void closeProgressDialog() {
-		if (progressDialog != null) {
-			progressDialog.dismiss();
-		}
-	}
 }

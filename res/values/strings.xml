@@ -56,7 +56,7 @@
 	
 	<string name="position_name">监测点</string>
 	<string name="primary_pollutant">首要污染物</string>
-	<string name="primary_pollutant_detail">首要污染物：\t\t%1$s（%2$s）</string>
+	<string name="primary_pollutant_detail">首要污染物：\t\t%1$s</string>
 	
 	
 </resources>

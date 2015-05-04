@@ -2,7 +2,7 @@ package com.example.pm25.util.myComponent;
 
 import java.util.List;
 
-import com.example.pm25.model.Station;
+import com.example.pm25.po.Station;
 import com.example.pm25.util.MyLog;
 
 import android.R.bool;
