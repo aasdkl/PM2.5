@@ -8,6 +8,7 @@ import com.example.pm25.R.id;
 import com.example.pm25.util.Constants;
 import com.example.pm25.util.MyLog;
 import com.example.pm25.util.PM25Constants;
+import com.example.pm25.util.myComponent.StationAdapter;
 
 import android.R.anim;
 import android.R.bool;

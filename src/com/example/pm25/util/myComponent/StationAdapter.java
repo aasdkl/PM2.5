@@ -1,4 +1,4 @@
-package com.example.pm25;
+package com.example.pm25.util.myComponent;
 
 import java.util.List;
 
