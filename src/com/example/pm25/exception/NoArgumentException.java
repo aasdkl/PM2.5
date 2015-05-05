@@ -16,6 +16,6 @@ public class NoArgumentException extends Exception {
 	
 	public NoArgumentException() {
 		super(MSG_STRING);
-		MyLog.e("", MSG_STRING);
+		MyLog.e("NoArgumentException", MSG_STRING);
 	}
 }

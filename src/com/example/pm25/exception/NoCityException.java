@@ -16,6 +16,6 @@ public class NoCityException extends Exception {
 	
 	public NoCityException() {
 		super(MSG_STRING);
-		MyLog.e("", MSG_STRING);
+		MyLog.e("NoCityException", MSG_STRING);
 	}
 }

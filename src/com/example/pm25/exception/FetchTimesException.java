@@ -16,6 +16,6 @@ public class FetchTimesException extends Exception {
 	
 	public FetchTimesException() {
 		super(MSG_STRING);
-		MyLog.e("", MSG_STRING);
+		MyLog.e("FetchTimesException", MSG_STRING);
 	}
 }

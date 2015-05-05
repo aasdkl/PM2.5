@@ -16,6 +16,6 @@ public class NoLoginException extends Exception {
 	
 	public NoLoginException() {
 		super(MSG_STRING);
-		MyLog.e("", MSG_STRING);
+		MyLog.e("NoLoginException", MSG_STRING);
 	}
 }
