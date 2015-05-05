@@ -19,7 +19,6 @@ public class StationAirQuality {
 	private int so2 = Constants.NO_VALUE;
 
 	private String primaryPollutant = "";
-	private String quality = "";
 	private String time_point = "";
 
 	public StationAirQuality(Station station, AQIDetail aqiDetail) {
@@ -100,14 +99,6 @@ public class StationAirQuality {
 			primaryPollutant = "无";
 		}
 		this.primaryPollutant = primaryPollutant;
-	}
-
-	public String getQuality() {
-		return quality;
-	}
-
-	public void setQuality(String quality) {
-		this.quality = quality;
 	}
 
 	public String getTime_point() {
