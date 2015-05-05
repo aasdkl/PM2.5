@@ -36,7 +36,7 @@ public final class AQIDetail {
 		this(aqi, null);
 	}
 	/**
-	 * 双验证的构造方式，如果AQI范围和等级不一致将会
+	 * 双验证的构造方式，如果AQI范围和等级不一致将会抛出异常
 	 * @param aqi >= 0
 	 * @param quality 质量等级
 	 */
