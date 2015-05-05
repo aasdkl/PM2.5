@@ -3,11 +3,17 @@ package com.example.pm25.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.example.pm25.connectivity.ConnectService;
+import com.example.pm25.connectivity.JsonTools;
 import com.example.pm25.model.db.DBService;
 import com.example.pm25.po.City;
 import com.example.pm25.po.Station;
-import com.example.pm25.po.StationAirQuality;
+import com.example.pm25.po.AirQuality;
+import com.example.pm25.util.PM25APIs.returnKey;
 import com.example.pm25.util.myComponent.MyApplication;
 
 /**
@@ -65,18 +71,20 @@ public class ModelService {
 	 * 调用数据获取数据
 	 * <b>注</b>：此方法会开启线程，需要使用ModelCallBackListener进行回调
 	 * @param city 
+	 * @param station 
 	 */
-	public synchronized static void getDetails(final City city, final ModelCallBackListener<StationAirQuality> listener) {
+/*TODO
+	public synchronized static void getDetails(final City city, Station station, final ModelCallBackListener<AirQuality> listener) {
 		
 		new Thread(new Runnable() {
 			public void run() {
-				List<StationAirQuality> qualities = new LinkedList<>();
+				List<AirQuality> qualities = new LinkedList<>();
 
 				// 如果上次sharedDatas里面数据为空，或者sharedDatas时间和实际的时间相差>1小时，网络获取数据
 				// 否则返回上次的数据
-				StationAirQuality oldData = getOldData(city);
+				AirQuality oldData = getOldData(city);
 
-				if (isDataTooOld(oldData)) {
+				if (oldData==null || isDataTooOld(oldData)) {
 					qualities = fetchCityQualityAndReturn(city, listener);
 				} else {
 					qualities.add(oldData);
@@ -89,20 +97,27 @@ public class ModelService {
 
 	}
 	
-	private static boolean isDataTooOld(StationAirQuality oldData) {
+	private static boolean isDataTooOld(AirQuality oldData) {
 		// TODO 如果上次sharedDatas里面数据为空，或者sharedDatas时间和实际的时间相差>1小时
 		return false;
 	}
-	private static StationAirQuality getOldData(City city) {
-		// TODO 获取sharedDatas里面数据
-		return null;
+	
+	private static AirQuality getOldData(City city, String station) {
+		String dataJsonStr = SharedPreferenceHelper.loadCacheDetails(city.getCityName(), station);
+		if (dataJsonStr != null) {
+			if (station==null) {
+				return JsonTools.parseCityQuality(city, response, listener);
+			}
+		} else {
+			return null;
+		}
 	}
 	
-	private static List<StationAirQuality> fetchCityQualityAndReturn(City city, final ModelCallBackListener<StationAirQuality> listener) {
-		List<StationAirQuality> stations = ConnectService.getCityQuality(city, listener);
+	private static List<AirQuality> fetchCityQualityAndReturn(City city, final ModelCallBackListener<AirQuality> listener) {
+		List<AirQuality> stations = ConnectService.getCityQuality(city, listener);
 		return stations;
 	}
-	
+	*/
 	/**
 	 * 此时数据库没有数据，需要从网络获取并存到数据库
 	 * @param city 

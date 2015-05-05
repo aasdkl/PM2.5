@@ -8,7 +8,7 @@ import com.example.pm25.model.CitiesSpellAdder;
 import com.example.pm25.model.ModelCallBackListener;
 import com.example.pm25.po.City;
 import com.example.pm25.po.Station;
-import com.example.pm25.po.StationAirQuality;
+import com.example.pm25.po.AirQuality;
 import com.example.pm25.util.MyLog;
 import com.example.pm25.util.PM25APIs;
 import com.example.pm25.util.myComponent.CityComparator;
@@ -51,16 +51,21 @@ public class ConnectService {
 
 		return stations;
 	}
-
-	public static List<StationAirQuality> getCityQuality(City city,
-			ModelCallBackListener<StationAirQuality> listener) {
+/*
+	public static List<AirQuality> getAirQuality(
+			City city,
+			Station station,
+			ModelCallBackListener<AirQuality> listener) {
 		
-		List<StationAirQuality> quality = new LinkedList<>();
+		List<AirQuality> quality = new LinkedList<>();
 		
-		//TODO choose API
-		String api = PM25APIs.STATION.addCity(city.getCityName()).toString();
+		String api = PM25APIs.AQI_DETAIL.addStations(false)
+				.addCity(city.getCityName()).toString();
 		
+		MyLog.d("connectService", api);
 		String response = ConnectHelper.sendRequest(api, listener);
+
+		// TODO 将json数据存储到SharedPreference中
 		
 		if (response != "") {
 			quality = JsonTools.parseCityQuality(city, response, listener);
@@ -68,5 +73,5 @@ public class ConnectService {
 
 		return quality;
 	}
-
+*/
 }

@@ -5,14 +5,12 @@ import android.os.Parcelable;
 
 import com.example.pm25.util.Constants;
 
-public final class City implements Parcelable {
+public final class City extends BasePlace {
 
-	private int id;
 	private String cityName;
 	private String citySpell;
 	
 	public static final String TABLE_NAME = "City";
-	public static final String ID = "id";
 	public static final String NAME = "city_name";
 	public static final String SPELL = "city_spell";
 	
@@ -65,14 +63,6 @@ public final class City implements Parcelable {
 		this.cityName = cityName;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-	
 	public boolean isIdExist(){
 		if (id==Constants.NO_VALUE) {
 			return false;

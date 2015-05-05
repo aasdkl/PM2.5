@@ -5,15 +5,15 @@ import java.util.List;
 
 import com.example.pm25.model.ModelCallBackListener;
 import com.example.pm25.model.ModelService;
+import com.example.pm25.po.BasePlace;
 import com.example.pm25.po.City;
 import com.example.pm25.po.Station;
-import com.example.pm25.po.StationAirQuality;
+import com.example.pm25.po.AirQuality;
 import com.example.pm25.util.Constants;
 import com.example.pm25.util.MyLog;
 import com.example.pm25.util.PM25Constants;
 import com.example.pm25.util.myComponent.StationAdapter;
 
-import android.R.layout;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,7 +24,7 @@ import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -45,12 +45,12 @@ public class DetailActivity extends BaseActivity {
 	private ViewFlipper elseAns;
 
 	private Spinner titleSpinner;
-	private StationAdapter<String> stationAdapter;
+	private StationAdapter<BasePlace> stationAdapter;
 	
 	private City selectedCity;
 	
 	// 所选择的位置数据
-	private List<String> stationList = new ArrayList<>();
+	private List<BasePlace> placeSelectedList = new ArrayList<>();
 
 	public static void actionStart(Context context, City selectedCity) {
 		Intent intent = new Intent(context, DetailActivity.class);
@@ -71,20 +71,22 @@ public class DetailActivity extends BaseActivity {
 
 		// 初始化只有当前区域的spinner
 		titleSpinner = (Spinner) findViewById(R.id.title);
-		stationList.add(selectedCity.getCityName());
+		placeSelectedList.add(selectedCity);
 		
-		stationAdapter = new StationAdapter<String>(this, 
-				R.layout.spinner_checked_text, stationList);
+		stationAdapter = new StationAdapter<BasePlace>(this, 
+				R.layout.spinner_checked_text, placeSelectedList);
 		titleSpinner.setAdapter(stationAdapter);
-//		titleSpinner.setOnItemClickListener(new OnItemClickListener() {
-//			@Override
-//			public void onItemClick(AdapterView<?> parent,
-//					View view, int position, long id) {
-//				// TODO 2、title的点击
-//				String selected = stationAdapter.getItem(position);
-//				Toast.makeText(DetailActivity.this, selected, Toast.LENGTH_SHORT).show();
-//			}
-//		});
+		titleSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent,
+					View view, int position, long id) {
+				BasePlace selected = stationAdapter.getItem(position);
+				Toast.makeText(DetailActivity.this, selected.getName(), Toast.LENGTH_SHORT).show();
+			}
+			@Override  
+			public void onNothingSelected(AdapterView<?> parent) {  
+			}
+		});
 
 		setDialogHint("正在更新数据……");
 
@@ -104,7 +106,7 @@ public class DetailActivity extends BaseActivity {
 					public void run() {
 						for (Station station : stations) {
 							MyLog.e("DetailActivity", station.toString());
-							stationList.add(station.getStationName());
+							placeSelectedList.add(station);
 						}
 						stationAdapter.notifyDataSetChanged();
 					}
@@ -121,32 +123,35 @@ public class DetailActivity extends BaseActivity {
 			}
 		});
 
-		// TODO 1、获取数据
-//		getCityDetails();
+		// TODO 获取数据
+//		getCityDetails(null);
 	}
 
 	/**
-	 * 这里获取城市所有的数据
+	 * 获取空气质量的数据
 	 * 包括观测点Station列表、每个Station的值
+	 * @param Stations station 如果为null则代表是城市平均水平
 	 */
-	private void getCityDetails() {
+/*	TODO
+	private void getCityDetails(Station station) {
+		
 		showProgressDialog();
 		
 		// 获取数据
-		ModelService.getDetails(selectedCity, new ModelCallBackListener<StationAirQuality>() {
+		ModelService.getDetails(selectedCity, station, new ModelCallBackListener<AirQuality>() {
 			@Override
-			public void onFinish(final List<StationAirQuality> cityDetails) {
+			public void onFinish(final List<AirQuality> cityDetails) {
 				if (cityDetails==null || cityDetails.size()==0) {
 					closeProgressDialog();
 				} else {
 					updateDetails(cityDetails);
 				}
 			}
-			private void updateDetails(final List<StationAirQuality> cityDetails) {
+			private void updateDetails(final List<AirQuality> cityDetails) {
 				// 刷新界面
 				runOnUiThread(new Runnable() {
 					public void run() {
-						StationAirQuality quality = cityDetails.get(0);
+						AirQuality quality = cityDetails.get(0);
 						putDataOnViews(quality);
 						closeProgressDialog();
 					}
@@ -164,57 +169,13 @@ public class DetailActivity extends BaseActivity {
 			}
 		});
 	}
-
-	/**
-	 * 这里获取观测点的数据
-	 * 包括观测点Station列表、每个Station的值
-	 */
-	private void getStationDetails(City city, String station) {
-		showProgressDialog();
-		
-		// 获取数据
-		ModelService.getDetails(city, new ModelCallBackListener<StationAirQuality>() {
-			@Override
-			public void onFinish(final List<StationAirQuality> stations) {
-				if (stations==null || stations.size()==0) {
-					closeProgressDialog();
-				} else {
-					updateDetails();
-				}
-			}
-			private void updateDetails() {
-//				// 刷新界面
-//				runOnUiThread(new Runnable() {
-//					public void run() {
-//						cityList.clear();
-//						for (City city : cities) {
-//							cityList.add(city);
-//						}
-//						adapter.notifyDataSetChanged();
-//						listView.setSelection(0);
-//						closeProgressDialog();
-//						MyLog.d("test", cities.toString());
-//					}
-//				});
-			}
-			@Override
-			public void onError(final Exception e) {
-				e.printStackTrace();
-				runOnUiThread(new Runnable() {
-					public void run() {
-						closeProgressDialog();
-						Toast.makeText(DetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-					}
-				});
-			}
-		});
-	}
+*/
 
 	/**
 	 * 将数据放入view中
 	 * @param quality
 	 */
-	private void putDataOnViews(StationAirQuality quality) {
+	private void putDataOnViews(AirQuality quality) {
 		((TextView) findViewById(R.id.pm)).setText(quality.getAqiDetail().getAqi());
 	
 		String aqiDesc = getResources().getString(R.string.describe);

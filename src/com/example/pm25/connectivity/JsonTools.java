@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.example.pm25.exception.DecodeException;
 import com.example.pm25.exception.FetchTimesException;
 import com.example.pm25.exception.NoArgumentException;
 import com.example.pm25.exception.NoCityException;
@@ -14,8 +15,10 @@ import com.example.pm25.exception.NoLoginException;
 import com.example.pm25.model.ModelCallBackListener;
 import com.example.pm25.po.City;
 import com.example.pm25.po.Station;
-import com.example.pm25.po.StationAirQuality;
+import com.example.pm25.po.AirQuality;
+import com.example.pm25.util.AQIDetail;
 import com.example.pm25.util.Constants;
+import com.example.pm25.util.PM25APIs;
 
 public class JsonTools {
 	
@@ -24,7 +27,6 @@ public class JsonTools {
 	private static final String ERROR3 = "Sorry，您这个小时内的API请求次数用完了，休息一下吧！";
 	private static final String ERROR4 = "You need to sign in or sign up before continuing.";
 	private static final String ERROR5 = "未找到这个城市的监测站";
-	
 	
 	public static List<City> parseAllCity(String response, ModelCallBackListener<City> listener) {
 		List<City> cities = new LinkedList<>();
@@ -77,16 +79,51 @@ public class JsonTools {
 
 		return stations;
 	}
-	
-	
-	public static List<StationAirQuality> parseCityQuality(City city,
+	/* TODO
+	public static List<AirQuality> parseAirQuality(
+			City city,
+			Station station,
 			String response,
-			ModelCallBackListener<StationAirQuality> listener) {
-		// TODO Auto-generated method stub
-		return null;
+			ModelCallBackListener<AirQuality> listener) {
+		
+		
+		List<AirQuality> qualities = new LinkedList<>();
+		// 判断返回的json是否正确
+		int result = verifyData(response, listener);
+		if (result == Constants.THREAD_FAIL) {
+			return qualities;
+		}
+		try {
+			
+			JSONObject cityQuality = new JSONArray(response).getJSONObject(0);
+			AirQuality cityObj = new AirQuality(null, 
+					new AQIDetail(cityQuality.getInt(PM25APIs.returnKey.AQI.toString()),
+							cityQuality.getString(PM25APIs.returnKey.QUALITY.toString()))
+			);
+			
+			cityObj.setPm25(cityQuality.getInt(PM25APIs.returnKey.PM25.toString()));
+			cityObj.setPm10(cityQuality.getInt(PM25APIs.returnKey.PM10.toString()));
+			cityObj.setCo(cityQuality.getInt(PM25APIs.returnKey.CO.toString()));
+			cityObj.setO3_1h(cityQuality.getInt(PM25APIs.returnKey.O3.toString()));
+			cityObj.setO3_8h(cityQuality.getInt(PM25APIs.returnKey.O3_8H.toString()));
+			cityObj.setNo2(cityQuality.getInt(PM25APIs.returnKey.NO2.toString()));
+			cityObj.setSo2(cityQuality.getInt(PM25APIs.returnKey.SO2.toString()));
+			cityObj.setTime_point(cityQuality.getString(PM25APIs.returnKey.TIME.toString()));
+			cityObj.setPrimaryPollutant(cityQuality.getString(PM25APIs.returnKey.PRIMARY.toString()));
+			
+			qualities.add(cityObj);
+			
+		} catch (Exception e) {
+			listener.onError(e);
+			// 将返回值情空
+			qualities.clear();
+		}
+
+		return qualities;
+
 	}
 
-	
+	*/
 	
 	
 	
@@ -115,6 +152,9 @@ public class JsonTools {
 					break;
 				case ERROR4:
 					listener.onError(new NoLoginException());
+					break;
+				case ERROR5:
+					listener.onError(new DecodeException());
 					break;
 				default:
 					listener.onError(new Exception((String)jsonObject.get("error")));
