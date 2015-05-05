@@ -1,5 +1,6 @@
 package com.example.pm25.model;
 
+import com.example.pm25.util.PM25APIs;
 import com.example.pm25.util.myComponent.MyApplication;
 
 import android.app.Activity;
@@ -12,7 +13,7 @@ final public class SharedPreferenceHelper {
 	private static Context context = MyApplication.getContext();
 	
 	public static void savaCacheDetails(String cityName, String stationName, String response){
-		if (response!=null && response.trim().length()!=0 && !response.contains("error")) {
+		if (response!=null && response.trim().length()!=0 && !response.contains(PM25APIs.returnKey.ERROR.toString())) {
 			SharedPreferences.Editor editor = context.getSharedPreferences(FILE_NAME, Activity.MODE_PRIVATE).edit();
 			editor.putString(cityName + stationName, response);
 			editor.commit();
