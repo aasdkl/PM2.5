@@ -2,7 +2,6 @@ package com.example.pm25.po;
 
 import com.example.pm25.util.AQIDetail;
 import com.example.pm25.util.Constants;
-import com.example.pm25.util.PM25Constants;
 
 public class AirQuality {
 
