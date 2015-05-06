@@ -40,12 +40,23 @@ public class MainActivity extends BaseActivity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				selectedCity = cityList.get(position);
 				if (selectedCity.isCity()) {
-					DetailActivity.actionStart(MainActivity.this, selectedCity);
+					DetailActivity.actionStart(MainActivity.this, selectedCity, isInterest(selectedCity));
 				}
 			}
+
 		});
 		getCities();
 	}
+
+	
+	private boolean isInterest(City selectedCity) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	//TODO 当界面返回需要更新List，因为可能remove
+	
+
 	
 	private void getCities() {
 		showProgressDialog();

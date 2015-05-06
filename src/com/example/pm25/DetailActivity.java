@@ -14,17 +14,21 @@ import com.example.pm25.util.MyLog;
 import com.example.pm25.util.PM25Constants;
 import com.example.pm25.util.myComponent.StationAdapter;
 
+import android.R.bool;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -45,16 +49,19 @@ public class DetailActivity extends BaseActivity {
 	private ViewFlipper elseAns;
 
 	private Spinner titleSpinner;
+	private Button add;
 	private StationAdapter<BasePlace> stationAdapter;
 	
 	private City selectedCity;
+	private boolean isInterested;
 	
 	// 所选择的位置数据
 	private List<BasePlace> placeSelectedList = new ArrayList<>();
 
-	public static void actionStart(Context context, City selectedCity) {
+	public static void actionStart(Context context, City selectedCity, boolean isInterest) {
 		Intent intent = new Intent(context, DetailActivity.class);
 		intent.putExtra("city", selectedCity);
+		intent.putExtra("isInterest", isInterest);
 		context.startActivity(intent);
 	}
 
@@ -81,10 +88,40 @@ public class DetailActivity extends BaseActivity {
 			public void onItemSelected(AdapterView<?> parent,
 					View view, int position, long id) {
 				BasePlace selected = stationAdapter.getItem(position);
-				Toast.makeText(DetailActivity.this, selected.getName(), Toast.LENGTH_SHORT).show();
+				getCityDetails(BasePlace.getStationInstanceOrReturnNull(selected));
 			}
 			@Override  
 			public void onNothingSelected(AdapterView<?> parent) {  
+			}
+		});
+
+		// 初始化添加按钮
+		add = (Button) findViewById(R.id.add);
+		if (isInterested) {
+			add.setText(getResources().getString(R.string.minus));
+		} else {
+			add.setText(getResources().getString(R.string.add));
+		}
+		add.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				addInterestOrReomve();
+				if (isInterested) {
+					Toast.makeText(DetailActivity.this, getResources().getString(R.string.addHint), Toast.LENGTH_SHORT).show();
+					add.setText(getResources().getString(R.string.minus));
+				} else {
+					Toast.makeText(DetailActivity.this, getResources().getString(R.string.removeHint), Toast.LENGTH_SHORT).show();
+					add.setText(getResources().getString(R.string.add));
+				}
+			}
+
+		});
+		// 初始化返回按钮
+		Button back = (Button) findViewById(R.id.back);
+		back.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				DetailActivity.this.finish();
 			}
 		});
 
@@ -123,16 +160,24 @@ public class DetailActivity extends BaseActivity {
 			}
 		});
 
-		// TODO 获取数据
-//		getCityDetails(null);
+		getCityDetails(null);
 	}
 
+	
+	private void addInterestOrReomve() {
+		if (isInterested) {
+			ModelService.removeInterested(selectedCity);
+		} else {
+			ModelService.addInterested(selectedCity);
+		}
+		isInterested = !isInterested;
+	}
+	
 	/**
 	 * 获取空气质量的数据
 	 * 包括观测点Station列表、每个Station的值
 	 * @param Stations station 如果为null则代表是城市平均水平
 	 */
-/*	TODO
 	private void getCityDetails(Station station) {
 		
 		showProgressDialog();
@@ -169,14 +214,20 @@ public class DetailActivity extends BaseActivity {
 			}
 		});
 	}
-*/
 
 	/**
 	 * 将数据放入view中
 	 * @param quality
 	 */
 	private void putDataOnViews(AirQuality quality) {
-		((TextView) findViewById(R.id.pm)).setText(quality.getAqiDetail().getAqi());
+		if (quality==null) {
+			return;
+		}
+		
+		// set background
+		findViewById(R.id.matchScene).setBackground(quality.getAqiDetail().getColor());
+		
+		((TextView) findViewById(R.id.pm)).setText(""+quality.getAqiDetail().getAqi());
 	
 		String aqiDesc = getResources().getString(R.string.describe);
 		aqiDesc = String.format(aqiDesc, quality.getAqiDetail().getLevel(), quality.getAqiDetail().getQuality()); 
@@ -185,19 +236,19 @@ public class DetailActivity extends BaseActivity {
 		((TextView) findViewById(R.id.time)).setText(quality.getTime_point());
 
 		String primaryPoll = getResources().getString(R.string.primary_pollutant_detail);
-		aqiDesc = String.format(primaryPoll, quality.getPrimaryPollutant()); 
+		primaryPoll = String.format(primaryPoll, quality.getPrimaryPollutant()); 
 		((TextView) findViewById(R.id.primary_pollutant)).setText(primaryPoll);
 		
 		((TextView) findViewById(R.id.aqi_effect)).setText(quality.getAqiDetail().getEffect());
 		((TextView) findViewById(R.id.aqi_suggestion)).setText(quality.getAqiDetail().getSuggestion());
 		
-		((TextView) circles[0].findViewById(R.id.num)).setText(quality.getPm25());
-		((TextView) circles[1].findViewById(R.id.num)).setText(quality.getPm10());
-		((TextView) circles[2].findViewById(R.id.num)).setText(quality.getCo());
-		((TextView) circles[3].findViewById(R.id.num)).setText(quality.getNo2());
-		((TextView) circles[4].findViewById(R.id.num)).setText(quality.getO3_1h());
-		((TextView) circles[5].findViewById(R.id.num)).setText(quality.getO3_8h());
-		((TextView) circles[6].findViewById(R.id.num)).setText(quality.getSo2());
+		((TextView) circles[0].findViewById(R.id.num)).setText(""+quality.getPm25());
+		((TextView) circles[1].findViewById(R.id.num)).setText(""+quality.getPm10());
+		((TextView) circles[2].findViewById(R.id.num)).setText(""+quality.getCo());
+		((TextView) circles[3].findViewById(R.id.num)).setText(""+quality.getNo2());
+		((TextView) circles[4].findViewById(R.id.num)).setText(""+quality.getO3_1h());
+		((TextView) circles[5].findViewById(R.id.num)).setText(""+quality.getO3_8h());
+		((TextView) circles[6].findViewById(R.id.num)).setText(""+quality.getSo2());
 
 	}
 	/**

@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.example.pm25.model.CitiesSpellAdder;
 import com.example.pm25.model.ModelCallBackListener;
+import com.example.pm25.model.SharedPreferenceHelper;
 import com.example.pm25.po.City;
 import com.example.pm25.po.Station;
 import com.example.pm25.po.AirQuality;
@@ -51,27 +52,28 @@ public class ConnectService {
 
 		return stations;
 	}
-/*
-	public static List<AirQuality> getAirQuality(
-			City city,
-			Station station,
+
+	public static List<AirQuality> getQualities(City city, Station station,
 			ModelCallBackListener<AirQuality> listener) {
-		
 		List<AirQuality> quality = new LinkedList<>();
+		String api = null;
+		// 城市
+		if (station == null) {
+			api = PM25APIs.AQI_DETAIL.addCity(city.getCityName()).addStations(false).toString();
+		// 观测点
+		} else {
+			api = PM25APIs.AQI_STATION.addStationCode(station.getStationCode()).toString();
+		}
 		
-		String api = PM25APIs.AQI_DETAIL.addStations(false)
-				.addCity(city.getCityName()).toString();
-		
-		MyLog.d("connectService", api);
+		MyLog.d("getQualities", api);
 		String response = ConnectHelper.sendRequest(api, listener);
 
 		// TODO 将json数据存储到SharedPreference中
-		
+		SharedPreferenceHelper.savaCacheDetails(city, station, response);
 		if (response != "") {
-			quality = JsonTools.parseCityQuality(city, response, listener);
+			quality.add(JsonTools.parseQuality(city, station, response, listener));
 		}
 
 		return quality;
 	}
-*/
 }

@@ -11,7 +11,7 @@ public class AirQuality {
 	
 	private int pm25 	= Constants.NO_VALUE;
 	private int pm10 	= Constants.NO_VALUE;
-	private int co 		= Constants.NO_VALUE;
+	private float co	= Constants.NO_VALUE;
 	private int o3_1h 	= Constants.NO_VALUE;
 	private int o3_8h 	= Constants.NO_VALUE;
 	private int no2 	= Constants.NO_VALUE;
@@ -20,6 +20,12 @@ public class AirQuality {
 	private String primaryPollutant = "";
 	private String time_point 	= "";
 
+	/**
+	 *构造函数，如果没有station传入null
+	 * @param city
+	 * @param station
+	 * @param aqi
+	 */
 	public AirQuality(City city, Station station, int aqi) {
 		this(city, station, aqi, null);
 	}
@@ -66,12 +72,12 @@ public class AirQuality {
 		this.pm10 = pm10;
 	}
 
-	public int getCo() {
+	public float getCo() {
 		return co;
 	}
 
-	public void setCo(int co) {
-		this.co = co;
+	public void setCo(double co) {
+		this.co = (float)co;
 	}
 
 	public int getO3_1h() {
@@ -111,7 +117,7 @@ public class AirQuality {
 	}
 
 	public void setPrimaryPollutant(String primaryPollutant) {
-		if (primaryPollutant.equals("")) {
+		if (primaryPollutant==null || primaryPollutant.equals("null")) {
 			primaryPollutant = "无";
 		}
 		this.primaryPollutant = primaryPollutant;

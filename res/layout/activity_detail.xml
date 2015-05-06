@@ -30,7 +30,6 @@
                 android:id="@+id/matchScene"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/yellow_500"
                 android:paddingBottom="16dp"
                 android:paddingEnd="0dp"
                 android:paddingStart="30dp"

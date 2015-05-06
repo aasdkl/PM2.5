@@ -3,8 +3,10 @@ package com.example.pm25.util;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import android.R.drawable;
 import android.R.integer;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 
 import com.example.pm25.R;
 import com.example.pm25.exception.DataErrorException;
@@ -24,6 +26,14 @@ public final class AQIDetail {
 	private static final String[] LEVEL = resources.getStringArray(R.array.aqi_level);
 	private static final String[] EFFECT = resources.getStringArray(R.array.aqi_effect);
 	private static final String[] SUGGESTION = resources.getStringArray(R.array.aqi_suggestion);
+	private static final Drawable[] COLORS = new Drawable[]{
+		resources.getDrawable(R.color.green_500), 
+		resources.getDrawable(R.color.yellow_500),
+		resources.getDrawable(R.color.orange_500), 
+		resources.getDrawable(R.color.red_500), 
+		resources.getDrawable(R.color.purple_500), 
+		resources.getDrawable(R.color.brown_500)
+	};
 	
 	private int aqi = Constants.NO_VALUE;
 	private int aqiLevel = Constants.NO_VALUE;
@@ -142,5 +152,21 @@ public final class AQIDetail {
 	 */
 	public String getSuggestion() {
 		return SUGGESTION[aqiLevel];
+	}
+
+	/**
+	 * 获取颜色
+	 * @return
+	 * <ul>	
+	 * 	<li>绿</li>
+	 * 	<li>黄</li>
+	 *   	<li>橙</li>
+	 *   	<li>红</li>
+	 *   	<li>紫</li>
+	 *   	<li>褐红</li>
+	 * </ul>
+	 */
+	public Drawable getColor() {
+		return COLORS[aqiLevel];
 	}
 }

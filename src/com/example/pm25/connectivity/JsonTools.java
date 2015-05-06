@@ -7,18 +7,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.R.id;
+
 import com.example.pm25.exception.DecodeException;
 import com.example.pm25.exception.FetchTimesException;
 import com.example.pm25.exception.NoArgumentException;
 import com.example.pm25.exception.NoCityException;
 import com.example.pm25.exception.NoLoginException;
 import com.example.pm25.model.ModelCallBackListener;
+import com.example.pm25.po.AirQuality;
+import com.example.pm25.po.BasePlace;
 import com.example.pm25.po.City;
 import com.example.pm25.po.Station;
-import com.example.pm25.po.AirQuality;
-import com.example.pm25.util.AQIDetail;
 import com.example.pm25.util.Constants;
 import com.example.pm25.util.PM25APIs;
+import com.example.pm25.util.PM25APIKeys;
 
 public class JsonTools {
 	
@@ -28,7 +31,7 @@ public class JsonTools {
 	private static final String ERROR4 = "You need to sign in or sign up before continuing.";
 	private static final String ERROR5 = "未找到这个城市的监测站";
 	
-	public static List<City> parseAllCity(String response, ModelCallBackListener<City> listener) {
+	public static List<City> parseAllCity(String response, ModelCallBackListener<BasePlace> listener) {
 		List<City> cities = new LinkedList<>();
 		// 判断返回的json是否正确
 		int result = verifyData(response, listener);
@@ -52,7 +55,7 @@ public class JsonTools {
 		return cities;
 	}
 	
-	public static List<Station> parseAllStations(City city, String response, ModelCallBackListener listener) {
+	public static List<Station> parseAllStations(City city, String response, ModelCallBackListener<BasePlace> listener) {
 		List<Station> stations = new LinkedList<>();
 		// 判断返回的json是否正确
 		int result = verifyData(response, listener);
@@ -79,68 +82,55 @@ public class JsonTools {
 
 		return stations;
 	}
-	/* TODO
-	public static List<AirQuality> parseAirQuality(
+	
+
+	public static AirQuality parseQuality(
 			City city,
 			Station station,
 			String response,
 			ModelCallBackListener<AirQuality> listener) {
 		
-		
-		List<AirQuality> qualities = new LinkedList<>();
 		// 判断返回的json是否正确
 		int result = verifyData(response, listener);
 		if (result == Constants.THREAD_FAIL) {
-			return qualities;
+			return null;
 		}
+		JSONObject jsonObject;
+		AirQuality quality;
 		try {
+			jsonObject = new JSONArray(response).getJSONObject(0);
+			quality = new AirQuality(city, null, 
+					jsonObject.getInt(PM25APIKeys.AQI.toString()),
+					jsonObject.getString(PM25APIKeys.QUALITY.toString())
+					);
 			
-			JSONObject cityQuality = new JSONArray(response).getJSONObject(0);
-			AirQuality cityObj = new AirQuality(null, 
-					new AQIDetail(cityQuality.getInt(PM25APIs.returnKey.AQI.toString()),
-							cityQuality.getString(PM25APIs.returnKey.QUALITY.toString()))
-			);
-			
-			cityObj.setPm25(cityQuality.getInt(PM25APIs.returnKey.PM25.toString()));
-			cityObj.setPm10(cityQuality.getInt(PM25APIs.returnKey.PM10.toString()));
-			cityObj.setCo(cityQuality.getInt(PM25APIs.returnKey.CO.toString()));
-			cityObj.setO3_1h(cityQuality.getInt(PM25APIs.returnKey.O3.toString()));
-			cityObj.setO3_8h(cityQuality.getInt(PM25APIs.returnKey.O3_8H.toString()));
-			cityObj.setNo2(cityQuality.getInt(PM25APIs.returnKey.NO2.toString()));
-			cityObj.setSo2(cityQuality.getInt(PM25APIs.returnKey.SO2.toString()));
-			cityObj.setTime_point(cityQuality.getString(PM25APIs.returnKey.TIME.toString()));
-			cityObj.setPrimaryPollutant(cityQuality.getString(PM25APIs.returnKey.PRIMARY.toString()));
-			
-			qualities.add(cityObj);
-			
-		} catch (Exception e) {
+			quality.setPm25(jsonObject.getInt(PM25APIKeys.PM25.toString()));
+			quality.setPm10(jsonObject.getInt(PM25APIKeys.PM10.toString()));
+			quality.setCo(jsonObject.getDouble(PM25APIKeys.CO.toString()));
+			quality.setO3_1h(jsonObject.getInt(PM25APIKeys.O3.toString()));
+			quality.setO3_8h(jsonObject.getInt(PM25APIKeys.O3_8H.toString()));
+			quality.setNo2(jsonObject.getInt(PM25APIKeys.NO2.toString()));
+			quality.setSo2(jsonObject.getInt(PM25APIKeys.SO2.toString()));
+			quality.setTime_point(jsonObject.getString(PM25APIKeys.TIME.toString()));
+			quality.setPrimaryPollutant(jsonObject.getString(PM25APIKeys.PRIMARY.toString()));
+		} catch (JSONException e) {
 			listener.onError(e);
 			// 将返回值情空
-			qualities.clear();
+			return null;
 		}
-
-		return qualities;
-
+		return quality;
 	}
-
-	*/
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 
 	private static int verifyData(String response, ModelCallBackListener listener) {
 		int result = Constants.THREAD_FAIL;
+		if (!response.contains(PM25APIKeys.ERROR.toString())) {
+			return Constants.SUCCESS;
+		}
 		try {
 			JSONObject jsonObject = new JSONObject(response);
-			if (jsonObject != null && jsonObject.has("error")) {
-				switch ((String)jsonObject.get("error")) {
+			String errorKey = PM25APIKeys.ERROR.toString();
+			if (jsonObject != null && jsonObject.has(errorKey)) {
+				switch ((String)jsonObject.get(errorKey)) {
 				case ERROR1:
 					listener.onError(new NoArgumentException());
 					break;

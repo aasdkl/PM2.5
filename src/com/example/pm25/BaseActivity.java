@@ -4,6 +4,7 @@ import com.example.pm25.util.MyLog;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.os.Bundle;
 
 public class BaseActivity extends Activity {
 
@@ -32,5 +33,5 @@ public class BaseActivity extends Activity {
 			progressDialog.dismiss();
 		}
 	}
-
+	
 }

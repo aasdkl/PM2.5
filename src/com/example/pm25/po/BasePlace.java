@@ -27,4 +27,11 @@ public abstract class BasePlace implements Parcelable {
 	public String toString() {
 		return getName();
 	}
+
+	public static Station getStationInstanceOrReturnNull(BasePlace selected) {
+		if (selected instanceof Station) {
+			return (Station) selected;
+		}
+		return null;
+	}
 }

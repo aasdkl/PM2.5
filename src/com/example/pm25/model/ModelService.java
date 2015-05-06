@@ -1,11 +1,19 @@
 package com.example.pm25.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
+import android.R.bool;
+import android.R.id;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.test.PerformanceTestCase;
+import android.text.format.DateFormat;
 
 import com.example.pm25.connectivity.ConnectService;
 import com.example.pm25.connectivity.JsonTools;
@@ -13,7 +21,7 @@ import com.example.pm25.model.db.DBService;
 import com.example.pm25.po.City;
 import com.example.pm25.po.Station;
 import com.example.pm25.po.AirQuality;
-import com.example.pm25.util.PM25APIs.returnKey;
+import com.example.pm25.util.Constants;
 import com.example.pm25.util.myComponent.MyApplication;
 
 /**
@@ -66,27 +74,26 @@ public class ModelService {
 		}).start();
 	}
 
-
 	/**
 	 * 调用数据获取数据
 	 * <b>注</b>：此方法会开启线程，需要使用ModelCallBackListener进行回调
 	 * @param city 
 	 * @param station 
 	 */
-/*TODO
-	public synchronized static void getDetails(final City city, Station station, final ModelCallBackListener<AirQuality> listener) {
+	public synchronized static void getDetails(final City city, final Station station, final ModelCallBackListener<AirQuality> listener) {
 		
 		new Thread(new Runnable() {
 			public void run() {
 				List<AirQuality> qualities = new LinkedList<>();
 
-				// 如果上次sharedDatas里面数据为空，或者sharedDatas时间和实际的时间相差>1小时，网络获取数据
-				// 否则返回上次的数据
-				AirQuality oldData = getOldData(city);
+				AirQuality oldData = getOldData(city, station, listener);
 
+				// 如果上次sharedDatas里面数据为空，或者sharedDatas时间和实际的时间相差>1小时
 				if (oldData==null || isDataTooOld(oldData)) {
-					qualities = fetchCityQualityAndReturn(city, listener);
+					// 网络获取数据
+					qualities = ConnectService.getQualities(city, station, listener);
 				} else {
+					// 否则返回上次的数据
 					qualities.add(oldData);
 				}
 				
@@ -97,27 +104,34 @@ public class ModelService {
 
 	}
 	
+	/**
+	 * 判断sharedDatas中存储的旧数据时间和实际的时间相差是否>1小时
+	 * @param oldData
+	 * @return
+	 */
 	private static boolean isDataTooOld(AirQuality oldData) {
-		// TODO 如果上次sharedDatas里面数据为空，或者sharedDatas时间和实际的时间相差>1小时
-		return false;
+		SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Constants.LOCALE);
+		Date old = null;
+		try {
+			old = dataFormat.parse(oldData.getTime_point());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}							// 1H
+		int delay = (int) ((new Date().getTime() - old.getTime()) / (Constants.AN_HOUR));
+
+		return (delay > 1) ? true : false;
 	}
 	
-	private static AirQuality getOldData(City city, String station) {
-		String dataJsonStr = SharedPreferenceHelper.loadCacheDetails(city.getCityName(), station);
+	private static AirQuality getOldData(City city, Station station, 
+			ModelCallBackListener<AirQuality> listener) {
+		String dataJsonStr = SharedPreferenceHelper.loadCacheDetails(city, station);
 		if (dataJsonStr != null) {
-			if (station==null) {
-				return JsonTools.parseCityQuality(city, response, listener);
-			}
+			return JsonTools.parseQuality(city, station, dataJsonStr, listener);
 		} else {
 			return null;
 		}
 	}
 	
-	private static List<AirQuality> fetchCityQualityAndReturn(City city, final ModelCallBackListener<AirQuality> listener) {
-		List<AirQuality> stations = ConnectService.getCityQuality(city, listener);
-		return stations;
-	}
-	*/
 	/**
 	 * 此时数据库没有数据，需要从网络获取并存到数据库
 	 * @param city 
@@ -155,5 +169,23 @@ public class ModelService {
 		cities = null;
 	}
 
+	
+	//TODO
+	public static List<City> getInterestedCities() {
+		return null;
+	}
+
+
+	public static void removeInterested(City selectedCity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public static void addInterested(City selectedCity) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 
 }
