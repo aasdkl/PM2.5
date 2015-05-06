@@ -8,9 +8,9 @@
     <string name="describe">%1$s（%2$s）</string>
     <string name="add">+</string>
     <string name="minus">×</string>
-    <string name="addHint">此功能尚未实现</string>
-    <string name="removeHint">此功能尚未实现</string>
-
+    <string name="addHint">已在城市界面列表成功添加快速入口</string>
+    <string name="removeHint">已将快速入口移除</string>
+    
     <string name="showCircle">——数据详情——</string>
     <string name="chooseHint">请选择城市</string>
     
