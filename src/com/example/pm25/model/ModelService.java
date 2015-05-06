@@ -5,15 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
-import android.R.bool;
-import android.R.id;
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.test.PerformanceTestCase;
-import android.text.format.DateFormat;
+import android.R.color;
 
 import com.example.pm25.connectivity.ConnectService;
 import com.example.pm25.connectivity.JsonTools;
@@ -170,21 +163,28 @@ public class ModelService {
 	}
 
 	
-	//TODO
 	public static List<City> getInterestedCities() {
-		return null;
+		String citiesStr = SharedPreferenceHelper.loadInterestedCities();
+		return JsonTools.parseInterestCity(citiesStr);
 	}
 
-
 	public static void removeInterested(City selectedCity) {
-		// TODO Auto-generated method stub
-		
+		String citiesStr = SharedPreferenceHelper.loadInterestedCities();
+		List<City> cities = JsonTools.parseInterestCity(citiesStr);		
+		if (cities.contains(selectedCity)) {
+			cities.remove(selectedCity);
+		}
+		SharedPreferenceHelper.saveInterestedCities(JsonTools.toCityJsonStr(cities));
 	}
 
 
 	public static void addInterested(City selectedCity) {
-		// TODO Auto-generated method stub
-		
+		String citiesStr = SharedPreferenceHelper.loadInterestedCities();
+		List<City> cities = JsonTools.parseInterestCity(citiesStr);
+		if (!cities.contains(selectedCity)) {
+			cities.add(selectedCity);
+		}
+		SharedPreferenceHelper.saveInterestedCities(JsonTools.toCityJsonStr(cities));
 	}
 	
 

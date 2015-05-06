@@ -10,11 +10,12 @@ import com.example.pm25.po.City;
 import com.example.pm25.po.Station;
 import com.example.pm25.po.AirQuality;
 import com.example.pm25.util.Constants;
-import com.example.pm25.util.MyLog;
 import com.example.pm25.util.PM25Constants;
 import com.example.pm25.util.myComponent.StationAdapter;
 
 import android.R.bool;
+import android.R.integer;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -55,14 +56,15 @@ public class DetailActivity extends BaseActivity {
 	private City selectedCity;
 	private boolean isInterested;
 	
+	public static final int REQUEST_CODE = 233;
 	// 所选择的位置数据
 	private List<BasePlace> placeSelectedList = new ArrayList<>();
 
-	public static void actionStart(Context context, City selectedCity, boolean isInterest) {
-		Intent intent = new Intent(context, DetailActivity.class);
+	public static void actionStart(Activity preActivity, City selectedCity, boolean isInterest) {
+		Intent intent = new Intent(preActivity, DetailActivity.class);
 		intent.putExtra("city", selectedCity);
 		intent.putExtra("isInterest", isInterest);
-		context.startActivity(intent);
+		preActivity.startActivityForResult(intent, REQUEST_CODE);
 	}
 
 	@Override
@@ -73,6 +75,7 @@ public class DetailActivity extends BaseActivity {
 
 		Intent intent = getIntent();
 		selectedCity = intent.getParcelableExtra("city");
+		isInterested = intent.getBooleanExtra("isInterest", false);
 
 		setHelperButtons();
 
@@ -121,7 +124,7 @@ public class DetailActivity extends BaseActivity {
 		back.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				DetailActivity.this.finish();
+				doFinish();
 			}
 		});
 
@@ -142,7 +145,6 @@ public class DetailActivity extends BaseActivity {
 				runOnUiThread(new Runnable() {
 					public void run() {
 						for (Station station : stations) {
-							MyLog.e("DetailActivity", station.toString());
 							placeSelectedList.add(station);
 						}
 						stationAdapter.notifyDataSetChanged();
@@ -300,6 +302,22 @@ public class DetailActivity extends BaseActivity {
 				Html.fromHtml(getResources().getString(R.string.moeMouse)));
 	}
 
+	@Override
+	public void onBackPressed() {
+		doFinish();
+	}
+	
+	public static final String RETURN_IS_INTERESTED = "isInterested";
+	public static final String RETURN_SELECTED_CITY = "city";
+	private void doFinish() {
+		// 数据回调
+		Intent intent = new Intent();
+		intent.putExtra(RETURN_IS_INTERESTED, isInterested);
+		intent.putExtra(RETURN_SELECTED_CITY, selectedCity);
+		setResult(RESULT_OK, intent);
+		finish();
+	}
+	
 }
 
 /**
@@ -413,7 +431,6 @@ final class OnCirclesTouchListener implements OnTouchListener {
 		}
 		
 		int circleIndex = part.ordinal() * 4 + lineIndex;
-		MyLog.e("circleIndex", ""+circleIndex);
 
 		if (circleIndex == DetailActivity.CIRCLES_NUM - 1) {
 			return false;
@@ -423,6 +440,7 @@ final class OnCirclesTouchListener implements OnTouchListener {
 			return true;
 		}
 	}
+	
 
 }
 

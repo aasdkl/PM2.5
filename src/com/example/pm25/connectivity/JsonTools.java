@@ -20,7 +20,6 @@ import com.example.pm25.po.BasePlace;
 import com.example.pm25.po.City;
 import com.example.pm25.po.Station;
 import com.example.pm25.util.Constants;
-import com.example.pm25.util.PM25APIs;
 import com.example.pm25.util.PM25APIKeys;
 
 public class JsonTools {
@@ -34,6 +33,9 @@ public class JsonTools {
 	public static List<City> parseAllCity(String response, ModelCallBackListener<BasePlace> listener) {
 		List<City> cities = new LinkedList<>();
 		// 判断返回的json是否正确
+		if (response.equals("")) {
+			return cities;
+		}
 		int result = verifyData(response, listener);
 		if (result == Constants.THREAD_FAIL) {
 			return cities;
@@ -47,7 +49,11 @@ public class JsonTools {
 			}
 			
 		} catch (Exception e) {
-			listener.onError(e);
+			if (listener == null) {
+				e.printStackTrace();
+			} else {
+				listener.onError(e);
+			}
 			// 将返回值情空
 			cities.clear();
 		}
@@ -129,7 +135,7 @@ public class JsonTools {
 		try {
 			JSONObject jsonObject = new JSONObject(response);
 			String errorKey = PM25APIKeys.ERROR.toString();
-			if (jsonObject != null && jsonObject.has(errorKey)) {
+			if (jsonObject != null && jsonObject.has(errorKey) && listener != null) {
 				switch ((String)jsonObject.get(errorKey)) {
 				case ERROR1:
 					listener.onError(new NoArgumentException());
@@ -149,13 +155,64 @@ public class JsonTools {
 				default:
 					listener.onError(new Exception((String)jsonObject.get("error")));
 				}
-			} else if (jsonObject != null) { 
+			} else if (jsonObject != null && listener != null) { 
 				result = Constants.SUCCESS;
 			}
 		} catch (JSONException e) {
-			listener.onError(e);
+			if (listener == null) {
+				e.printStackTrace();
+			} else {
+				listener.onError(e);
+			}
 		}
 		return result;
+	}
+
+	public static String toCityJsonStr(List<City> cities) {
+		JSONObject resultObj = null;
+		try {
+			JSONArray array = new JSONArray();
+	
+			for (City city : cities) {
+				JSONObject eachObj = new JSONObject();
+				eachObj.put(City.ID, city.getId());
+				eachObj.put(City.NAME, city.getCityName());
+				eachObj.put(City.SPELL, city.getCitySpell());
+				array.put(eachObj);
+			}
+			
+			resultObj = new JSONObject();
+			resultObj.put("cities", array);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return resultObj.toString();
+	}
+
+	public static List<City> parseInterestCity(String citiesStr) {
+		List<City> cities = new LinkedList<>();
+		if (citiesStr == null || citiesStr.equals("")) {
+			return cities;
+		}
+		try {
+			JSONObject jsonObject = new JSONObject(citiesStr);
+			JSONArray jsonArray = jsonObject.getJSONArray("cities");
+			JSONObject each = new JSONObject();
+			for (int i = 0; i < jsonArray.length(); i++) {
+				each = jsonArray.getJSONObject(i);
+				cities.add(new City(each.getInt(City.ID), 
+						each.getString(City.NAME), 
+						each.getString(City.SPELL)));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			// 将返回值情空
+			cities.clear();
+		}
+
+		return cities;
 	}
 
 

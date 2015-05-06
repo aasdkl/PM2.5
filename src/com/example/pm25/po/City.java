@@ -84,9 +84,14 @@ public final class City extends BasePlace {
 		return ID + ": " + id + " " + NAME + ": " + cityName + " " + SPELL + " " + ": " + citySpell;
 	}
 	
-	
 	public boolean isCity(){
-		return !(cityName.length()==1 && Character.isLetter(cityName.charAt(0)));
+		if (cityName.length()==1 && Character.isLetter(cityName.charAt(0))) {
+			return false;
+		} else if (citySpell == null) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 	@Override
@@ -102,5 +107,17 @@ public final class City extends BasePlace {
 		dest.writeString(citySpell);  
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (! (o instanceof City)) {
+			return false;
+		}
+		return cityName.equals(((City)o).getCityName());
+	}
+	
+	@Override
+	public int hashCode() {
+		return id;
+	}
 	
 }

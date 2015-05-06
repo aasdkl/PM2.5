@@ -1,15 +1,16 @@
 package com.example.pm25;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.example.pm25.R;
+import com.example.pm25.R.id;
 import com.example.pm25.model.ModelCallBackListener;
 import com.example.pm25.model.ModelService;
 import com.example.pm25.po.City;
-import com.example.pm25.util.MyLog;
 import com.example.pm25.util.myComponent.CityAdapter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -22,7 +23,7 @@ public class MainActivity extends BaseActivity {
 
 	private ListView listView;
 	private CityAdapter adapter;
-	private List<City> cityList = new ArrayList<>();
+	private List<City> cityList = new LinkedList<>();
 	private City selectedCity;
 	
 	@Override
@@ -40,7 +41,8 @@ public class MainActivity extends BaseActivity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				selectedCity = cityList.get(position);
 				if (selectedCity.isCity()) {
-					DetailActivity.actionStart(MainActivity.this, selectedCity, isInterest(selectedCity));
+					DetailActivity.actionStart(MainActivity.this, selectedCity, 
+							isInterest(selectedCity));
 				}
 			}
 
@@ -50,13 +52,9 @@ public class MainActivity extends BaseActivity {
 
 	
 	private boolean isInterest(City selectedCity) {
-		// TODO Auto-generated method stub
-		return false;
+		List<City> list = ModelService.getInterestedCities();
+		return list.contains(selectedCity);
 	}
-	
-	//TODO 当界面返回需要更新List，因为可能remove
-	
-
 	
 	private void getCities() {
 		showProgressDialog();
@@ -70,13 +68,13 @@ public class MainActivity extends BaseActivity {
 					runOnUiThread(new Runnable() {
 						public void run() {
 							cityList.clear();
+							addInterestedCities();
 							for (City city : cities) {
 								cityList.add(city);
 							}
 							adapter.notifyDataSetChanged();
 							listView.setSelection(0);
 							closeProgressDialog();
-							MyLog.d("test", cities.toString());
 						}
 					});
 				}
@@ -92,6 +90,56 @@ public class MainActivity extends BaseActivity {
 				});
 			}
 		});
+	}
+
+	private void addInterestedCities() {
+		cityList.clear();
+		List<City> cities = ModelService.getInterestedCities();
+		if (cities!=null && cities.size()!=0) {
+			cityList.add(new City(getResources().getString(R.string.quickIn)));
+			for (City city : cities) {
+				cityList.add(city);
+			}
+		}
+	}
+	
+	@Override
+	//TODO 返回值这里有问题
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == DetailActivity.REQUEST_CODE && resultCode == RESULT_OK) {
+			boolean isInterested = data.getBooleanExtra(DetailActivity.RETURN_IS_INTERESTED, true);
+			selectedCity = data.getParcelableExtra(DetailActivity.RETURN_SELECTED_CITY);
+			City firstItem = cityList.get(0);
+			
+			// 如果有快捷入口标志先删掉
+			if ((!firstItem.isCity()) && firstItem.getCityName().equals(getResources().getString(R.string.quickIn))) {
+				cityList.remove(0);
+			}
+			boolean isShown = false;
+			for (int i = 0; i < cityList.size(); i++) {
+				City thisCity = cityList.get(i);
+				if (thisCity.equals(selectedCity)) {
+					if (!isInterested) {
+						cityList.remove(i);
+						break;
+					} else {
+						isShown = true;
+					}
+				} else if (!thisCity.isCity()) {
+					// 遍历到了A字段发现快捷入口中没有这个值
+					if (isInterested && !isShown) {
+						cityList.add(i, selectedCity);
+					}
+					break;
+				}
+			}
+			// 如果第一项是城市不是A，需要加入快捷入口标志
+			firstItem = cityList.get(0);
+			if (firstItem.isCity()) {
+				cityList.add(0, new City(getResources().getString(R.string.quickIn)));
+			}
+			adapter.notifyDataSetChanged();
+		}
 	}
 	
 }
