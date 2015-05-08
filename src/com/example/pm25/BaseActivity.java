@@ -13,13 +13,13 @@ public class BaseActivity extends Activity {
 	}
 
 	private ProgressDialog progressDialog;
-	protected String dialogHint = "正在加载……";
+	public String dialogHint = "正在加载……";
 	
 	public void setDialogHint(String dialogHint) {
 		this.dialogHint = dialogHint;
 	}
 	
-	protected void showProgressDialog() {
+	public void showProgressDialog() {
 		if (progressDialog == null) {
 			progressDialog = new ProgressDialog(this);
 			progressDialog.setMessage(dialogHint);
@@ -28,7 +28,7 @@ public class BaseActivity extends Activity {
 		progressDialog.show();
 	}
 
-	protected void closeProgressDialog() {
+	public void closeProgressDialog() {
 		if (progressDialog != null) {
 			progressDialog.dismiss();
 		}
