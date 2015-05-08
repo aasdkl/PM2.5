@@ -15,6 +15,7 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+		<item name="android:windowNoTitle">true</item>
     </style>
 
     <style name="list_itme_style">
@@ -57,5 +58,5 @@
         <item name="android:paddingBottom">4dp</item>
         <item name="android:textStyle">bold</item>
     </style>
-    
+
 </resources>
