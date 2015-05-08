@@ -9,6 +9,7 @@ import com.example.pm25.R;
 import com.example.pm25.model.ModelCallBackListener;
 import com.example.pm25.model.ModelService;
 import com.example.pm25.po.City;
+import com.example.pm25.util.MyLog;
 import com.example.pm25.util.myComponent.CityAdapter;
 
 import android.app.Activity;
@@ -51,7 +52,7 @@ public class ListFragment extends Fragment{
 //						ContentFragment fragment = (ContentFragment)listFragment.getFragmentManager().findFragmentById(R.id.rightFragment);
 //						fragment.refresh(news);
 					} else {
-						DetailActivity.actionStart(getActivity(), selectedCity, 
+						DetailActivity.actionStart(ListFragment.this, selectedCity, 
 								isInterest(selectedCity));
 					}
 				}
@@ -128,6 +129,7 @@ public class ListFragment extends Fragment{
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		MyLog.e("wtf?!", ""+resultCode);
 		if (requestCode == DetailActivity.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
 			boolean isInterested = data.getBooleanExtra(DetailActivity.RETURN_IS_INTERESTED, true);
 			selectedCity = data.getParcelableExtra(DetailActivity.RETURN_SELECTED_CITY);

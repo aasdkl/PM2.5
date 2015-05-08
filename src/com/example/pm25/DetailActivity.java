@@ -16,6 +16,7 @@ import com.example.pm25.util.myComponent.StationAdapter;
 import android.R.bool;
 import android.R.integer;
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -60,11 +61,11 @@ public class DetailActivity extends BaseActivity {
 	// 所选择的位置数据
 	private List<BasePlace> placeSelectedList = new ArrayList<>();
 
-	public static void actionStart(Activity preActivity, City selectedCity, boolean isInterest) {
-		Intent intent = new Intent(preActivity, DetailActivity.class);
+	public static void actionStart(Fragment preFragment, City selectedCity, boolean isInterest) {
+		Intent intent = new Intent(preFragment.getActivity(), DetailActivity.class);
 		intent.putExtra("city", selectedCity);
 		intent.putExtra("isInterest", isInterest);
-		preActivity.startActivityForResult(intent, REQUEST_CODE);
+		preFragment.startActivityForResult(intent, REQUEST_CODE);
 	}
 
 	@Override
