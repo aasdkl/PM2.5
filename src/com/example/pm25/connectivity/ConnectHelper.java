@@ -44,7 +44,7 @@ public final class ConnectHelper {
 			}
 			
 		} catch (Exception e) {
-			if (e.getMessage().contains("000ms")) {
+			if (e.getMessage().contains("000ms") || e.getMessage().contains("hostname")) {
 				listener.onError(new Exception("可能没有开启网络，或者服务器正在更新数据，请稍候再试"));
 			} else {
 				listener.onError(e);

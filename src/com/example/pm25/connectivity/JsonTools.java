@@ -153,7 +153,8 @@ public class JsonTools {
 					listener.onError(new DecodeException());
 					break;
 				default:
-					listener.onError(new Exception((String)jsonObject.get("error")));
+					String err = (String)jsonObject.get("error");
+					listener.onError(new Exception(err));
 				}
 			} else if (jsonObject != null && listener != null) { 
 				result = Constants.SUCCESS;

@@ -147,7 +147,7 @@ public class DetailActivity extends BaseActivity {
 				e.printStackTrace();
 				runOnUiThread(new Runnable() {
 					public void run() {
-						Toast.makeText(DetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+						showAlertDialog(e.getMessage());
 					}
 				});
 			}
@@ -201,7 +201,7 @@ public class DetailActivity extends BaseActivity {
 				runOnUiThread(new Runnable() {
 					public void run() {
 						closeProgressDialog();
-						Toast.makeText(DetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+						showAlertDialog(e.getMessage());
 					}
 				});
 			}

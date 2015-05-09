@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import android.R.color;
-
 import com.example.pm25.connectivity.ConnectService;
 import com.example.pm25.connectivity.JsonTools;
 import com.example.pm25.model.db.DBService;
@@ -15,6 +13,7 @@ import com.example.pm25.po.City;
 import com.example.pm25.po.Station;
 import com.example.pm25.po.AirQuality;
 import com.example.pm25.util.Constants;
+import com.example.pm25.util.MyLog;
 import com.example.pm25.util.myComponent.MyApplication;
 
 /**
@@ -111,6 +110,7 @@ public class ModelService {
 			e.printStackTrace();
 		}							// 1H
 		int delay = (int) ((new Date().getTime() - old.getTime()) / (Constants.AN_HOUR));
+		MyLog.e(new Date()+"", old+"");
 
 		return (delay > 1) ? true : false;
 	}

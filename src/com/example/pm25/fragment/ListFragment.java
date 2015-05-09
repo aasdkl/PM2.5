@@ -13,6 +13,7 @@ import com.example.pm25.util.MyLog;
 import com.example.pm25.util.myComponent.CityAdapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +28,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ListFragment extends Fragment {
@@ -116,16 +116,17 @@ public class ListFragment extends Fragment {
 				((BaseActivity) getActivity()).closeProgressDialog();
 			}
 
+			private void showAlertDialog(String err) {
+				((BaseActivity) getActivity()).showAlertDialog(err);
+			}
+
 			@Override
 			public void onError(final Exception e) {
 				e.printStackTrace();
 				getActivity().runOnUiThread(new Runnable() {
 					public void run() {
 						closeProgressDialog();
-						Toast.makeText(getActivity(),
-								e.getMessage(),
-								Toast.LENGTH_SHORT)
-								.show();
+						showAlertDialog(e.getMessage());
 					}
 
 				});
@@ -148,14 +149,12 @@ public class ListFragment extends Fragment {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode,
 			Intent data) {
-		MyLog.e("wtf?!", "" + resultCode);
 		if (requestCode == DetailActivity.REQUEST_CODE
 				&& resultCode == Activity.RESULT_OK) {
 			boolean isInterested = data.getBooleanExtra(
 					DetailActivity.RETURN_IS_INTERESTED,
 					true);
-			selectedCity = data
-					.getParcelableExtra(DetailActivity.RETURN_SELECTED_CITY);
+			selectedCity = data.getParcelableExtra(DetailActivity.RETURN_SELECTED_CITY);
 			City firstItem = cityList.get(0);
 
 			// 如果有快捷入口标志先删掉
