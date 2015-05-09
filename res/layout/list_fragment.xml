@@ -4,21 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <FrameLayout
-        android:id="@+id/navigate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.example.pm25.layout.PlainNavigateLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </com.example.pm25.layout.PlainNavigateLayout>
-    </FrameLayout>
-
     <ListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fastScrollEnabled="true">
     </ListView>
 
 </LinearLayout>
