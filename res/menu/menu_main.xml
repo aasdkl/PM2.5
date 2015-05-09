@@ -2,6 +2,7 @@
     <item
         android:id="@+id/action_top"
         android:showAsAction="always"
-        android:title="@string/toTop"/>
+        android:title="@string/toTop"
+        android:icon="@drawable/top"/>
 
 </menu>

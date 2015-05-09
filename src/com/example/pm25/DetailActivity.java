@@ -313,8 +313,10 @@ public class DetailActivity extends BaseActivity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		MenuItem add = menu.findItem(R.id.action_add);
 		if (isInterested) {
+			add.setIcon(getResources().getDrawable(R.drawable.remove));
 			add.setTitle(getResources().getString(R.string.minus));
 		} else {
+			add.setIcon(getResources().getDrawable(R.drawable.add));
 			add.setTitle(getResources().getString(R.string.add));
 		}
 		return super.onPrepareOptionsMenu(menu);
@@ -339,9 +341,11 @@ public class DetailActivity extends BaseActivity {
 			if (isInterested) {
 				Toast.makeText(DetailActivity.this, getResources().getString(R.string.addHint), Toast.LENGTH_SHORT).show();
 				item.setTitle(getResources().getString(R.string.minus));
+				item.setIcon(getResources().getDrawable(R.drawable.remove));
 			} else {
 				Toast.makeText(DetailActivity.this, getResources().getString(R.string.removeHint), Toast.LENGTH_SHORT).show();
 				item.setTitle(getResources().getString(R.string.add));
+				item.setIcon(getResources().getDrawable(R.drawable.add));
 			}
 			getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
 			return true;
