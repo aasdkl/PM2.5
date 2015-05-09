@@ -19,6 +19,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -27,7 +30,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class ListFragment extends Fragment{
+public class ListFragment extends Fragment {
 
 	private ListView listView;
 	private CityAdapter adapter;
@@ -36,7 +39,10 @@ public class ListFragment extends Fragment{
 	private boolean isTwoPane;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		getActivity().setTitle(getResources().getString(R.string.chooseHint));
+		setHasOptionsMenu(true);
 		View view = inflater.inflate(R.layout.list_fragment, container, false);
 		
 		listView = (ListView) view.findViewById(R.id.list_view);
@@ -49,66 +55,77 @@ public class ListFragment extends Fragment{
 				selectedCity = cityList.get(position);
 				if (selectedCity.isCity()) {
 					if (isTwoPane) {
-//						ContentFragment fragment = (ContentFragment)listFragment.getFragmentManager().findFragmentById(R.id.rightFragment);
-//						fragment.refresh(news);
+						// ContentFragment fragment =
+						// (ContentFragment)listFragment.getFragmentManager().findFragmentById(R.id.rightFragment);
+						// fragment.refresh(news);
 					} else {
-						DetailActivity.actionStart(ListFragment.this, selectedCity, 
+						DetailActivity.actionStart(
+								ListFragment.this,
+								selectedCity,
 								isInterest(selectedCity));
 					}
 				}
 			}
 
 		});
-		
+
 		getCities();
 		return view;
 	}
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-//		if (getActivity().findViewById(R.id.rightLayout)!=null) {
-//			isTwoPane = true;
-//		} else {
-			isTwoPane = false;
-//		}
+		// if (getActivity().findViewById(R.id.rightLayout)!=null) {
+		// isTwoPane = true;
+		// } else {
+		isTwoPane = false;
+		// }
 	}
 
 	private boolean isInterest(City selectedCity) {
 		List<City> list = ModelService.getInterestedCities();
 		return list.contains(selectedCity);
 	}
-	
+
 	private void getCities() {
-		showProgressDialog();
 		ModelService.getCities(new ModelCallBackListener<City>() {
 			@Override
 			public void onFinish(final List<City> cities) {
-				if (cities==null || cities.size()==0) {
+				if (cities == null || cities.size() == 0) {
 					closeProgressDialog();
 				} else {
 					// 刷新界面
-					getActivity().runOnUiThread(new Runnable() {
-						public void run() {
-							cityList.clear();
-							addInterestedCities();
-							for (City city : cities) {
-								cityList.add(city);
-							}
-							adapter.notifyDataSetChanged();
-							listView.setSelection(0);
-							closeProgressDialog();
-						}
-					});
+					getActivity().runOnUiThread(
+							new Runnable() {
+								public void run() {
+									cityList.clear();
+									addInterestedCities();
+									for (City city : cities) {
+										cityList.add(city);
+									}
+									adapter.notifyDataSetChanged();
+									listView.setSelection(0);
+									closeProgressDialog();
+								}
+							});
 				}
 			}
+
+			private void closeProgressDialog() {
+				((BaseActivity) getActivity()).closeProgressDialog();
+			}
+
 			@Override
 			public void onError(final Exception e) {
 				e.printStackTrace();
 				getActivity().runOnUiThread(new Runnable() {
 					public void run() {
 						closeProgressDialog();
-						Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+						Toast.makeText(getActivity(),
+								e.getMessage(),
+								Toast.LENGTH_SHORT)
+								.show();
 					}
 
 				});
@@ -119,24 +136,33 @@ public class ListFragment extends Fragment{
 	private void addInterestedCities() {
 		cityList.clear();
 		List<City> cities = ModelService.getInterestedCities();
-		if (cities!=null && cities.size()!=0) {
-			cityList.add(new City(getResources().getString(R.string.quickIn)));
+		if (cities != null && cities.size() != 0) {
+			cityList.add(new City(getResources().getString(
+					R.string.quickIn)));
 			for (City city : cities) {
 				cityList.add(city);
 			}
 		}
 	}
-	
+
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		MyLog.e("wtf?!", ""+resultCode);
-		if (requestCode == DetailActivity.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-			boolean isInterested = data.getBooleanExtra(DetailActivity.RETURN_IS_INTERESTED, true);
-			selectedCity = data.getParcelableExtra(DetailActivity.RETURN_SELECTED_CITY);
+	public void onActivityResult(int requestCode, int resultCode,
+			Intent data) {
+		MyLog.e("wtf?!", "" + resultCode);
+		if (requestCode == DetailActivity.REQUEST_CODE
+				&& resultCode == Activity.RESULT_OK) {
+			boolean isInterested = data.getBooleanExtra(
+					DetailActivity.RETURN_IS_INTERESTED,
+					true);
+			selectedCity = data
+					.getParcelableExtra(DetailActivity.RETURN_SELECTED_CITY);
 			City firstItem = cityList.get(0);
-			
+
 			// 如果有快捷入口标志先删掉
-			if ((!firstItem.isCity()) && firstItem.getCityName().equals(getResources().getString(R.string.quickIn))) {
+			if ((!firstItem.isCity())
+					&& firstItem.getCityName()
+							.equals(getResources()
+									.getString(R.string.quickIn))) {
 				cityList.remove(0);
 			}
 			boolean isShown = false;
@@ -160,19 +186,35 @@ public class ListFragment extends Fragment{
 			// 如果第一项是城市不是A，需要加入快捷入口标志
 			firstItem = cityList.get(0);
 			if (firstItem.isCity()) {
-				cityList.add(0, new City(getResources().getString(R.string.quickIn)));
+				cityList.add(0, new City(getResources()
+						.getString(R.string.quickIn)));
 			}
 			adapter.notifyDataSetChanged();
 		}
 	}
 
-	
-	
-	private void closeProgressDialog() {
-		((BaseActivity) getActivity()).closeProgressDialog();
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.menu_main, menu);
+		super.onCreateOptionsMenu(menu, inflater);
 	}
-	private void showProgressDialog() {
-		((BaseActivity) getActivity()).showProgressDialog();
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// 处理动作按钮的点击事件
+		switch (item.getItemId()) {
+		case R.id.action_top:
+			listView.post(new Runnable() {
+			        @Override
+			        public void run() {
+			        	listView.smoothScrollToPositionFromTop(0, 0, 100);
+			        }
+			});
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
-	
+
 }

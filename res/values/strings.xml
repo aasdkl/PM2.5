@@ -14,6 +14,7 @@
     
     <string name="showCircle">——数据详情——</string>
     <string name="chooseHint">请选择城市</string>
+    <string name="toTop">返回顶部</string>
     
     <string name="moeEye">&gt; &lt;</string>
     <string name="moeMouse">&lt;b&gt;～&lt;/b&gt;</string>

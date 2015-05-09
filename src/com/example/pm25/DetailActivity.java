@@ -129,8 +129,6 @@ public class DetailActivity extends BaseActivity {
 			}
 		});
 
-		setDialogHint("正在更新数据……");
-
 		// 获取station列表
 		ModelService.getStations(selectedCity, new ModelCallBackListener<Station>() {
 			@Override
@@ -183,7 +181,7 @@ public class DetailActivity extends BaseActivity {
 	 */
 	private void getCityDetails(Station station) {
 		
-		showProgressDialog();
+		showProgressDialog( "正在更新数据……");
 		
 		// 获取数据
 		ModelService.getDetails(selectedCity, station, new ModelCallBackListener<AirQuality>() {
