@@ -1,27 +1,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/lightgray" >
-
-    <Button
-        android:id="@+id/back"
-        style="@style/no_margin_btn"
-        android:text="@string/back" />
+    android:layout_height="match_parent" 
+    android:layout_gravity="center"
+    android:gravity="center"
+    >
 
     <Spinner
         android:id="@+id/title"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_weight="1"
         android:background="#00000000"
-        android:entries="@array/aqi_level"
         android:gravity="center"
         android:spinnerMode="dropdown" />
 
-    <Button
-        android:id="@+id/add"
-        style="@style/no_margin_btn"
-        android:text="@string/add" />
 
 </LinearLayout>

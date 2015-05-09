@@ -15,6 +15,8 @@ import com.example.pm25.util.myComponent.StationAdapter;
 
 import android.R.bool;
 import android.R.integer;
+import android.app.ActionBar;
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -22,6 +24,11 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -51,7 +58,6 @@ public class DetailActivity extends BaseActivity {
 	private ViewFlipper elseAns;
 
 	private Spinner titleSpinner;
-	private Button add;
 	private StationAdapter<BasePlace> stationAdapter;
 	
 	private City selectedCity;
@@ -71,7 +77,6 @@ public class DetailActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_detail);
 
 		Intent intent = getIntent();
@@ -80,8 +85,24 @@ public class DetailActivity extends BaseActivity {
 
 		setHelperButtons();
 
+		//准备
+		View actionbarLayout = LayoutInflater.from(this).inflate(R.layout.navigate, null);
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayShowCustomEnabled(true);
+
+//		ActionBar.LayoutParams mP = (ActionBar.LayoutParams) actionbarLayout.getLayoutParams();
+//	        mP.gravity = mP.gravity & ~Gravity.HORIZONTAL_GRAVITY_MASK | Gravity.CENTER_HORIZONTAL;
+		ActionBar.LayoutParams lp =new ActionBar.LayoutParams(
+				ActionBar.LayoutParams.MATCH_PARENT,
+				ActionBar.LayoutParams.MATCH_PARENT,
+				Gravity.CENTER);
+		actionBar.setCustomView(actionbarLayout, lp);
+		
+		
+		
+		titleSpinner = (Spinner) actionbarLayout.findViewById(R.id.title);
+		
 		// 初始化只有当前区域的spinner
-		titleSpinner = (Spinner) findViewById(R.id.title);
 		placeSelectedList.add(selectedCity);
 		
 		stationAdapter = new StationAdapter<BasePlace>(this, 
@@ -98,37 +119,8 @@ public class DetailActivity extends BaseActivity {
 			public void onNothingSelected(AdapterView<?> parent) {  
 			}
 		});
-
-		// 初始化添加按钮
-		add = (Button) findViewById(R.id.add);
-		if (isInterested) {
-			add.setText(getResources().getString(R.string.minus));
-		} else {
-			add.setText(getResources().getString(R.string.add));
-		}
-		add.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				addInterestOrReomve();
-				if (isInterested) {
-					Toast.makeText(DetailActivity.this, getResources().getString(R.string.addHint), Toast.LENGTH_SHORT).show();
-					add.setText(getResources().getString(R.string.minus));
-				} else {
-					Toast.makeText(DetailActivity.this, getResources().getString(R.string.removeHint), Toast.LENGTH_SHORT).show();
-					add.setText(getResources().getString(R.string.add));
-				}
-			}
-
-		});
-		// 初始化返回按钮
-		Button back = (Button) findViewById(R.id.back);
-		back.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				doFinish();
-			}
-		});
-
+		
+		
 		// 获取station列表
 		ModelService.getStations(selectedCity, new ModelCallBackListener<Station>() {
 			@Override
@@ -274,7 +266,7 @@ public class DetailActivity extends BaseActivity {
 		elseAskBtn2.setOnTouchListener(new OnCirclesTouchListener(
 				elseAns, OnCirclesTouchListener.Part.DOWN, this));
 	}
-
+	
 	/**
 	 * 初始化下方8个提示按钮
 	 */
@@ -317,6 +309,48 @@ public class DetailActivity extends BaseActivity {
 		finish();
 	}
 	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		MenuItem add = menu.findItem(R.id.action_add);
+		if (isInterested) {
+			add.setTitle(getResources().getString(R.string.minus));
+		} else {
+			add.setTitle(getResources().getString(R.string.add));
+		}
+		return super.onPrepareOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_detail, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// 处理动作按钮的点击事件
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			doFinish();
+			return true;
+		case R.id.action_add:
+			addInterestOrReomve();
+			if (isInterested) {
+				Toast.makeText(DetailActivity.this, getResources().getString(R.string.addHint), Toast.LENGTH_SHORT).show();
+				item.setTitle(getResources().getString(R.string.minus));
+			} else {
+				Toast.makeText(DetailActivity.this, getResources().getString(R.string.removeHint), Toast.LENGTH_SHORT).show();
+				item.setTitle(getResources().getString(R.string.add));
+			}
+			getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+
 }
 
 /**
