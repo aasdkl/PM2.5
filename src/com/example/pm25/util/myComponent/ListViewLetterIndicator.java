@@ -5,16 +5,9 @@ import java.util.List;
 
 import com.example.pm25.R;
 import com.example.pm25.po.City;
-import com.example.pm25.util.MyLog;
 
-import android.R.bool;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RoundRectShape;
-import android.support.annotation.BoolRes;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
