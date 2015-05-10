@@ -9,6 +9,7 @@ import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.widget.Toast;
 
 public class BaseActivity extends Activity {
 
@@ -18,22 +19,27 @@ public class BaseActivity extends Activity {
 	
 	private Builder alertDialog;
 	private ProgressDialog progressDialog;
-	private boolean isAlertShowing = false;;
+	private boolean isAlertShowing = false;
+
 	public void showAlertDialog(String hint) {
-		if (alertDialog == null) {
-			alertDialog = new AlertDialog.Builder(this);
-			alertDialog.setTitle("发生意外错误");
-			alertDialog.setPositiveButton("取消", new OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					isAlertShowing = false;
-				}
-			});
-		}
-		alertDialog.setMessage(hint);
-		if (!isAlertShowing) {
-			alertDialog.show();
-			isAlertShowing=true;
+		try {
+			if (alertDialog == null) {
+				alertDialog = new AlertDialog.Builder(this);
+				alertDialog.setTitle("发生意外错误");
+				alertDialog.setPositiveButton("取消", new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						isAlertShowing = false;
+					}
+				});
+			}
+			alertDialog.setMessage(hint);
+			if (!isAlertShowing) {
+				alertDialog.show();
+				isAlertShowing=true;
+			}
+		} catch (Exception e) {
+			Toast.makeText(this, hint, Toast.LENGTH_LONG).show();
 		}
 	}
 	

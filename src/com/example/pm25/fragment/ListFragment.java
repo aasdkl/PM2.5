@@ -11,6 +11,7 @@ import com.example.pm25.model.ModelService;
 import com.example.pm25.po.City;
 import com.example.pm25.util.MyLog;
 import com.example.pm25.util.myComponent.CityAdapter;
+import com.example.pm25.util.myComponent.ListViewLetterIndicator;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -29,10 +30,13 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
 
 public class ListFragment extends Fragment {
 
 	private ListView listView;
+	private ListViewLetterIndicator liIndicator;
+	private TextView tvAlert;
 	private CityAdapter adapter;
 	private List<City> cityList = new LinkedList<>();
 	private City selectedCity;
@@ -44,6 +48,9 @@ public class ListFragment extends Fragment {
 		getActivity().setTitle(getResources().getString(R.string.chooseHint));
 		setHasOptionsMenu(true);
 		View view = inflater.inflate(R.layout.list_fragment, container, false);
+		
+		liIndicator = (ListViewLetterIndicator) view.findViewById(R.id.liIndicator);
+		tvAlert = (TextView) view.findViewById(R.id.tvAlert);
 		
 		listView = (ListView) view.findViewById(R.id.list_view);
 		adapter = new CityAdapter(getActivity(), R.layout.city_item, cityList);
@@ -99,11 +106,11 @@ public class ListFragment extends Fragment {
 					getActivity().runOnUiThread(
 							new Runnable() {
 								public void run() {
-									cityList.clear();
 									addInterestedCities();
 									for (City city : cities) {
 										cityList.add(city);
 									}
+									liIndicator.setData(listView, cityList, tvAlert);
 									adapter.notifyDataSetChanged();
 									listView.setSelection(0);
 									closeProgressDialog();

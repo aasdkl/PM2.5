@@ -13,4 +13,8 @@
 	<color name="white">#fff</color>    
 	
 	<color name="alpha_white">#efff</color>    
+	<color name="alpha_black">#e000</color>
+	<color name="very_alpha_white">#4fff</color>
+	<color name="very_alpha_black">#4000</color>
+	
 </resources>
