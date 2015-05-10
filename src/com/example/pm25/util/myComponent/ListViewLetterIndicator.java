@@ -5,13 +5,16 @@ import java.util.List;
 
 import com.example.pm25.R;
 import com.example.pm25.po.City;
+import com.example.pm25.util.MyLog;
 
+import android.R.bool;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
+import android.support.annotation.BoolRes;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -23,27 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
-/**
- * 
- * 右侧字母索引。可作为一个独立的view插入自己的布局中<br>
- * <br>
- * 描述：<br>
- * 线型布局中嵌套一个线型布局（目的为了增大可滑动区域的面积，若不考虑此可不使用嵌套）。<br>
- * 每个字母插入内嵌的线性布局中，根据控件的高度计算每个字母的尺寸。<br>
- * <br>
- * 使用：<br>
- * 将此view插入你的布局文件中，初始化完成之后设置你的ListView和索引用的数据源(需要自己组织排序数据源)即可。<br>
- * <br>
- * 数据源的组织：若某项不参与排序则数据源中设置为'0'或其他小于'A'的ASCII字符，内部会将所有字符转换成大写，所以务必在外部做好排序。<br>
- * <br>
- * 建议：若你的数据中包括ASCII码为a0、20的字符，建议剔除，如：<br>
- * str.replace(' ', ' '); // a0->20 str.replaceAll(" ", "");<br>
- * <br>
- * 
- * @author ttdevs 2014-07-31
- * 
- */
 public class ListViewLetterIndicator extends LinearLayout implements OnScrollListener {
 
 	private LinearLayout llMain;
@@ -55,6 +37,7 @@ public class ListViewLetterIndicator extends LinearLayout implements OnScrollLis
 
 	private int mIndex; // 当前所处的indicator位置
 	private boolean scrollable = true; //
+	private int ignoreLength;
 
 	public ListViewLetterIndicator(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -79,8 +62,8 @@ public class ListViewLetterIndicator extends LinearLayout implements OnScrollLis
 	 * @param data
 	 *            排序用的数据源
 	 */
-	public void setData(ListView lv, List<City> data) {
-		setData(lv, data, null);
+	public void setData(ListView lv, List<City> data, int ignoreLength) {
+		setData(lv, data, null, ignoreLength);
 	}
 
 	/**
@@ -92,11 +75,13 @@ public class ListViewLetterIndicator extends LinearLayout implements OnScrollLis
 	 *            排序用的数据源
 	 * @param tv
 	 *            显示当前所处字母的TextView
+	 * @param iLength 
 	 */
-	public void setData(ListView lv, List<City> data, TextView tv) {
+	public void setData(ListView lv, List<City> data, TextView tv, int ignoreLength) {
 		mListView = lv;
 		mData = data;
 		tvAlert = tv;
+		this.ignoreLength = ignoreLength;
 		
 		indicatorList.add("#");
 		for (City city : data) {
@@ -107,6 +92,7 @@ public class ListViewLetterIndicator extends LinearLayout implements OnScrollLis
 
 		mListView.setOnScrollListener(this);
 		mIndex = 0;
+		changeIndicatorColor(0, false);
 	}
 
 	@Override
@@ -137,6 +123,7 @@ public class ListViewLetterIndicator extends LinearLayout implements OnScrollLis
 			tvIndicator.setTextColor(getResources().getColor(R.color.gray));
 			llMain.addView(tvIndicator, llpText);
 		}
+		
 	}
 
 	@SuppressLint("DefaultLocale")
@@ -167,17 +154,17 @@ public class ListViewLetterIndicator extends LinearLayout implements OnScrollLis
 			}
 			view = null;
 
-			changeIndicatorColor(index);
+			changeIndicatorColor(index, true);
 
-			char indexIndicator = indicatorList.get(index).charAt(0);// A:65, #:23
-			if (indexIndicator < 'A') {
+			String indexIndicator = indicatorList.get(index);
+			if (indexIndicator.equals("#")) {
 				mListView.setSelection(0);
 			} else {
 				for (int i = 0; i < mData.size(); i++) {
 					City city = mData.get(i);
 					String cityName = city.getCityName();
 					if (!city.isCity() && cityName.length()==1 
-							&& cityName.charAt(0) >= indexIndicator) {
+							&& cityName.equals(indexIndicator)) {
 						mListView.setSelection(i);
 						return true;
 					}
@@ -202,38 +189,29 @@ public class ListViewLetterIndicator extends LinearLayout implements OnScrollLis
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		// invalidate();
 	}
 
 	@SuppressLint("DefaultLocale")
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 		try {
-			if (!scrollable || null == mData || mData.size() == 0) {
+			if (!scrollable || null == mData || mData.size() == 0 || mData.get(firstVisibleItem).isCity()) {
 				return;
 			}
-			if (null != mData) {
-				if (mData.get(firstVisibleItem).isCity() || mData.get(firstVisibleItem).getCityName().length() != 1) {
-					return;
-				}
-				char indicator = mData.get(firstVisibleItem).getCityName().charAt(0);
-				if (indicator < 'A') {
-					changeIndicatorColor(0);
-					return;
-				}
-				for (int i = 1; i < indicatorList.size(); i++) {
-					if (indicatorList.get(i).charAt(0) == indicator) {
-						changeIndicatorColor(i);
-						return;
-					}
-				}
+			City now = mData.get(firstVisibleItem);
+			if (firstVisibleItem < ignoreLength) {
+				changeIndicatorColor(0, false);
+				return;
 			}
+			String indicator = now.getCityName();
+			changeIndicatorColor(indicatorList.indexOf(indicator), false);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void changeIndicatorColor(int index) {
+	private void changeIndicatorColor(int index, boolean isScroll) {
 		if (mIndex != 0 && mIndex == index) {
 			return;
 		}
@@ -246,17 +224,18 @@ public class ListViewLetterIndicator extends LinearLayout implements OnScrollLis
 		}
 		
 		tv.setTextColor(getResources().getColor(R.color.gray));
-
 		tv = (TextView) llMain.getChildAt(index);
 		tv.setTextColor(getResources().getColor(R.color.black));
-
 		mIndex = index;
-
-		showText(indicatorList.get(mIndex), true);
+		if (isScroll) {
+			showText(indicatorList.get(mIndex), true);
+		}
 	}
 
 	private void showText(String text, boolean isShow) {
-		if (null != tvAlert) {
+		if (null == tvAlert) {
+			return;
+		} else {
 			tvAlert.setText(text.toUpperCase());
 			tvAlert.setVisibility(isShow ? View.VISIBLE : View.INVISIBLE);
 		}

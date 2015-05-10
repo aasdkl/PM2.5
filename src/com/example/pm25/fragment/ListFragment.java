@@ -110,7 +110,7 @@ public class ListFragment extends Fragment {
 									for (City city : cities) {
 										cityList.add(city);
 									}
-									liIndicator.setData(listView, cityList, tvAlert);
+									liIndicator.setData(listView, cityList, tvAlert, cityList.size()-cities.size());
 									adapter.notifyDataSetChanged();
 									listView.setSelection(0);
 									closeProgressDialog();
